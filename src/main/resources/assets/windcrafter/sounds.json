@@ -1,0 +1,11 @@
+{
+  "get_heart": {
+    "sounds": [ "windcrafter:getheart" ]
+  },
+  "heart_container": {
+    "sounds": [ "windcrafter:heartcontainer" ]
+  },
+  "item_fanfare": {
+    "sounds": [ "windcrafter:itemfanfare" ]
+  }
+}

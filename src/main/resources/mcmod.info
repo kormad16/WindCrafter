@@ -1,0 +1,16 @@
+[
+{
+  "modid": "windcrafter",
+  "name": "The Windcrafter Mod",
+  "description": "Merging the experience of The Legend of Zelda: The Wind Waker with the magical experience of Minecraft.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Markus Zechner", "Marc Kornberger"],
+  "credits": "Shigeru Miyamoto & Nintendo as a whole",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
