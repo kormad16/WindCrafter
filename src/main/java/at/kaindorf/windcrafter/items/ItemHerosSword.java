@@ -14,10 +14,10 @@ public class ItemHerosSword extends ItemSword {
     private static final float attackDamage = 5.0f;
     private static final float attackSpeed = -1.2f;
 
-    public ItemHerosSword(String name) {
+    public ItemHerosSword() {
         super(Item.ToolMaterial.IRON);
-        setUnlocalizedName(name);
-        setRegistryName(name);
+        setUnlocalizedName("heros_sword");
+        setRegistryName("heros_sword");
         setCreativeTab(ModCreativeTabs.MOD_WEAPONS);
         setMaxDamage(2500);
     }
