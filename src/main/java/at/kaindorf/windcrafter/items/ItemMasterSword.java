@@ -16,7 +16,7 @@ public class ItemMasterSword extends ItemSword {
     private static final float[] attackSpeed = {-1.2f, -1.2f, -1.2f};
     private static final int[] durability = {10000, 20000, -1};
 
-    private int level;
+    public int level;
 
     public ItemMasterSword(int level) {
         super(Item.ToolMaterial.IRON);
@@ -50,4 +50,8 @@ public class ItemMasterSword extends ItemSword {
         return true;
     }
 
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return ((ItemMasterSword)(stack.getItem())).level == 2;
+    }
 }

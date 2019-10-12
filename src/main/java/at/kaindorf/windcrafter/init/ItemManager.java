@@ -17,6 +17,8 @@ public class ItemManager {
     public static Item HEART = new ItemHeart();
     public static Item HEARTCONTAINER = new ItemHeartContainer();
     public static Item HEARTPIECE = new ItemHeartPiece();
+    public static Item[] ENEMYWEAPON = new Item[ItemEnemyWeapon.ids.length];
+    static { for(int i = 0; i < ENEMYWEAPON.length; i++) ENEMYWEAPON[i] = new ItemEnemyWeapon(i); }
 
     public static void registerItems(RegistryEvent.Register<Item> e) {
         e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE);
@@ -24,6 +26,8 @@ public class ItemManager {
             e.getRegistry().register(ms);
         for(Item ts : TRIFORCESHARD)
             e.getRegistry().register(ts);
+        for(Item ew : ENEMYWEAPON)
+            e.getRegistry().register(ew);
     }
 
     public static void registerRenders(ModelRegistryEvent event) {
@@ -35,6 +39,8 @@ public class ItemManager {
         registerRender(HEART);
         registerRender(HEARTCONTAINER);
         registerRender(HEARTPIECE);
+        for(Item ew : ENEMYWEAPON)
+            registerRender(ew);
     }
 
     private static void registerRender(Item item) {
