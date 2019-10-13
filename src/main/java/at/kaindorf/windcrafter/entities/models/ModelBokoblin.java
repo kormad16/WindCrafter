@@ -44,9 +44,9 @@ public class ModelBokoblin extends ModelBase {
 		head.cubeList.add(new ModelBox(head, 46, 0, -2.0F, -1.4F, -7.35F, 4, 1, 5, -1.0F, false));
 
 		body = new ModelRenderer(this);
-		body.setRotationPoint(0.0F, 4.0F, 0.0F);
-		body.cubeList.add(new ModelBox(body, 0, 0, -4.0F, 0.1F, -2.0F, 8, 11, 4, 0.0F, false));
-		body.cubeList.add(new ModelBox(body, 0, 38, -4.0F, 0.1F, -2.0F, 8, 11, 4, 0.25F, false));
+		body.setRotationPoint(0.0F, 2.0F, 0.0F);
+		body.cubeList.add(new ModelBox(body, 0, 0, -4.0F, 2.1F, -2.0F, 8, 11, 4, 0.0F, false));
+		body.cubeList.add(new ModelBox(body, 0, 38, -4.0F, 2.1F, -2.0F, 8, 11, 4, 0.25F, false));
 
 		right_arm = new ModelRenderer(this);
 		right_arm.setRotationPoint(-5.0F, 5.5F, 0.0F);
@@ -62,7 +62,7 @@ public class ModelBokoblin extends ModelBase {
 
 		left_leg = new ModelRenderer(this);
 		left_leg.setRotationPoint(2.25F, 12.0F, 0.0F);
-		left_leg.cubeList.add(new ModelBox(left_leg, 0, 26, -1.75F, 3.0F, -1.5F, 3, 9, 3, 0.0F, false));
+		left_leg.cubeList.add(new ModelBox(left_leg, 0, 26, -1.25F, 3.0F, -1.5F, 3, 9, 3, 0.0F, false));
 	}
 
 	/**

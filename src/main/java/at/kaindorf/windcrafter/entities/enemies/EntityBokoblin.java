@@ -33,11 +33,13 @@ import java.util.List;
 
 public class EntityBokoblin extends EntityMob {
     /** The attribute which determines the chance that this mob will spawn reinforcements */
-    protected static final IAttribute SPAWN_REINFORCEMENTS_CHANCE = (new RangedAttribute((IAttribute)null, "bokoblin.spawnReinforcements", 0.0D, 0.0D, 1.0D)).setDescription("Spawn Reinforcements Chance");
+    //protected static final IAttribute SPAWN_REINFORCEMENTS_CHANCE = (new RangedAttribute((IAttribute)null, "bokoblin.spawnReinforcements", 0.0D, 0.0D, 1.0D)).setDescription("Spawn Reinforcements Chance");
 
-    private static final DataParameter<Boolean> ARMS_RAISED = EntityDataManager.<Boolean>createKey(EntityZombie.class, DataSerializers.BOOLEAN);
+    //private static final DataParameter<Boolean> ARMS_RAISED = EntityDataManager.<Boolean>createKey(EntityZombie.class, DataSerializers.BOOLEAN);
     private float bokoblinWidth = -1.0F;
     private float bokoblinHeight;
+
+    private static final DataParameter<Byte> PROFESSION = EntityDataManager.<Byte>createKey(EntityBokoblin.class, DataSerializers.BYTE);
 
     public static final List<String> BIOMES = Lists.newArrayList("minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:mutated_birch_forest",
             "minecraft:mutated_birch_forest_hills", "minecraft:forest", "minecraft:forest_hills", "minecraft:mutated_forest",
@@ -89,26 +91,36 @@ public class EntityBokoblin extends EntityMob {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.38D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
-        this.getAttributeMap().registerAttribute(SPAWN_REINFORCEMENTS_CHANCE).setBaseValue(this.rand.nextDouble() * net.minecraftforge.common.ForgeModContainer.zombieSummonBaseChance);
+//        this.getAttributeMap().registerAttribute(SPAWN_REINFORCEMENTS_CHANCE).setBaseValue(this.rand.nextDouble() * net.minecraftforge.common.ForgeModContainer.zombieSummonBaseChance);
     }
 
     protected void entityInit()
     {
         super.entityInit();
-        //this.getDataManager().register(VILLAGER_TYPE, Integer.valueOf(0)); TODO: add profession (blue, green, pink)
-        this.getDataManager().register(ARMS_RAISED, Boolean.valueOf(false));
+        this.getDataManager().register(PROFESSION, Byte.valueOf((byte)0));
+        //this.getDataManager().register(ARMS_RAISED, Boolean.valueOf(false));
     }
 
-    public void setArmsRaised(boolean armsRaised)
+    public byte getProfession()
     {
-        this.getDataManager().set(ARMS_RAISED, Boolean.valueOf(armsRaised));
+        return (byte)this.dataManager.get(PROFESSION);
     }
 
-    @SideOnly(Side.CLIENT)
-    public boolean isArmsRaised()
+    public void setProfession(byte profession)
     {
-        return ((Boolean)this.getDataManager().get(ARMS_RAISED)).booleanValue();
+        this.dataManager.set(PROFESSION, Byte.valueOf((byte)profession));
     }
+
+//    public void setArmsRaised(boolean armsRaised)
+//    {
+//        this.getDataManager().set(ARMS_RAISED, Boolean.valueOf(armsRaised));
+//    }
+
+//    @SideOnly(Side.CLIENT)
+//    public boolean isArmsRaised()
+//    {
+//        return ((Boolean)this.getDataManager().get(ARMS_RAISED)).booleanValue();
+//    }
 
     /**
      * Get the experience points the entity currently has.
@@ -300,14 +312,16 @@ public class EntityBokoblin extends EntityMob {
         float f = difficulty.getClampedAdditionalDifficulty();
         this.setCanPickUpLoot(true);
 
+        this.setProfession((byte)this.rand.nextInt(3));
+
         this.setEquipmentBasedOnDifficulty(difficulty);
         this.setEnchantmentBasedOnDifficulty(difficulty);
 
-        if (this.rand.nextFloat() < f * 0.05F)
-        {
-            this.getEntityAttribute(SPAWN_REINFORCEMENTS_CHANCE).applyModifier(new AttributeModifier("Leader bokoblin bonus", this.rand.nextDouble() * 0.25D + 0.5D, 0));
-            this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(new AttributeModifier("Leader bokoblin bonus", this.rand.nextDouble() * 3.0D + 1.0D, 2));
-        }
+//        if (this.rand.nextFloat() < f * 0.05F)
+//        {
+//            this.getEntityAttribute(SPAWN_REINFORCEMENTS_CHANCE).applyModifier(new AttributeModifier("Leader bokoblin bonus", this.rand.nextDouble() * 0.25D + 0.5D, 0));
+//            this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(new AttributeModifier("Leader bokoblin bonus", this.rand.nextDouble() * 3.0D + 1.0D, 2));
+//        }
 
         return livingdata;
     }

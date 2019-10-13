@@ -13,6 +13,8 @@ import javax.annotation.Nullable;
 public class RendererBokoblin extends RenderLiving<EntityBokoblin> {
 
     private static final ResourceLocation BLUE = new ResourceLocation("windcrafter:textures/entities/bokoblin_blue.png");
+    private static final ResourceLocation GREEN = new ResourceLocation("windcrafter:textures/entities/bokoblin_green.png");
+    private static final ResourceLocation PINK = new ResourceLocation("windcrafter:textures/entities/bokoblin_pink.png");
 
     public static final Factory FACTORY = new Factory();
 
@@ -21,6 +23,11 @@ public class RendererBokoblin extends RenderLiving<EntityBokoblin> {
     }
 
     protected ResourceLocation getEntityTexture(EntityBokoblin entity) {
+        switch (entity.getProfession()) {
+            case 0: return BLUE;
+            case 1: return GREEN;
+            case 2: return PINK;
+        }
         return BLUE;
     }
 
