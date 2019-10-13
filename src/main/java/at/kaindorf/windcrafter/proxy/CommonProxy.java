@@ -1,9 +1,11 @@
 package at.kaindorf.windcrafter.proxy;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
+import at.kaindorf.windcrafter.init.EntityManager;
 import at.kaindorf.windcrafter.items.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -31,7 +33,7 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent e) {
-
+        EntityManager.initEntities();
     }
 
     public void postinit(FMLPostInitializationEvent e) {

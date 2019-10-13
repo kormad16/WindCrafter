@@ -1,8 +1,6 @@
 itemGroup.mod_weapons=Windcrafter Weapons
 itemGroup.mod_other=Windcrafter Miscellaneous
 
-item.upvote.name=Upvote
-item.downvote.name=Downvote
 item.heros_sword.name=Hero's Sword
 item.mastersword1.name=Master Sword
 item.mastersword2.name=Master Sword
@@ -18,3 +16,5 @@ item.triforceshard8.name=Triforce Shard
 item.heart.name=Heart
 item.heartcontainer.name=Heart Container
 item.heartpiece.name=Heart Piece
+
+entity.bokoblin.name=Bokoblin
