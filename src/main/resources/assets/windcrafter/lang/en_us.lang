@@ -16,5 +16,7 @@ item.triforceshard8.name=Triforce Shard
 item.heart.name=Heart
 item.heartcontainer.name=Heart Container
 item.heartpiece.name=Heart Piece
+item.bokostick.name=Boko Stick
+item.darknut_sword.name=Darknut Sword
 
 entity.bokoblin.name=Bokoblin
