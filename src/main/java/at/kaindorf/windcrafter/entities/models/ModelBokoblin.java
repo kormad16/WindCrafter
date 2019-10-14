@@ -29,8 +29,8 @@ public class ModelBokoblin extends ModelBase {
 	public boolean isSneak;
 
 	public ModelBokoblin() {
-		leftArmPose = ModelBokoblin.ArmPose.EMPTY;
-		rightArmPose = ModelBokoblin.ArmPose.EMPTY;
+		leftArmPose = ArmPose.EMPTY;
+		rightArmPose = ArmPose.EMPTY;
 
 		textureWidth = 64;
 		textureHeight = 64;
@@ -92,8 +92,7 @@ public class ModelBokoblin extends ModelBase {
 	{
 		super.setModelAttributes(model);
 
-		if (model instanceof ModelBokoblin)
-		{
+		if (model instanceof ModelBokoblin) {
 			ModelBokoblin modelBokoblin = (ModelBokoblin)model;
 			this.leftArmPose = modelBokoblin.leftArmPose;
 			this.rightArmPose = modelBokoblin.rightArmPose;

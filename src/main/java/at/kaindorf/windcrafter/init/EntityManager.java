@@ -23,7 +23,7 @@ public class EntityManager {
     private static int nextEntityId = 1;
 
     public static void initEntities() {
-        registerEntityWithSpawnEgg(EntityBokoblin.class, "Bokoblin", 80, 3, true, 0x213C39, 0x526D7B, EnumCreatureType.MONSTER, 5, 1, 5, EntityBokoblin.BIOMES);
+        registerEntityWithSpawnEgg(EntityBokoblin.class, "bokoblin", 80, 3, true, 0x213C39, 0x526D7B, EnumCreatureType.MONSTER, 5, 1, 5, EntityBokoblin.BIOMES);
     }
 
     // register an entity
