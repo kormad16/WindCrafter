@@ -21,9 +21,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class EntityBokoblin extends EntityMob {
     /** The attribute which determines the chance that this mob will spawn reinforcements */
@@ -35,7 +35,7 @@ public class EntityBokoblin extends EntityMob {
 
     private static final DataParameter<Byte> PROFESSION = EntityDataManager.<Byte>createKey(EntityBokoblin.class, DataSerializers.BYTE);
 
-    public static final List<String> BIOMES = Lists.newArrayList("minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:mutated_birch_forest",
+    public static final String[] BIOMES = {"minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:mutated_birch_forest",
             "minecraft:mutated_birch_forest_hills", "minecraft:forest", "minecraft:forest_hills", "minecraft:mutated_forest",
             "minecraft:taiga", "minecraft:taiga_hills", "minecraft:mutated_taiga", "minecraft:redwood_taiga", "minecraft:redwood_taiga_hills",
             "minecraft:mutated_redwood_taiga", "minecraft:mutated_redwood_taiga_hills", "minecraft:taiga_cold", "minecraft:taiga_cold_hills",
@@ -51,7 +51,7 @@ public class EntityBokoblin extends EntityMob {
             "traverse:snowy_coniferous_forest", "traverse:temperate_rainforest", "traverse:woodlands",
             "conquest:boreal_forest", "conquest:birch_forest", "conquest:deciduous_forest", "conquest:oldgrowth_forest", "conquest:lorein_forest",
             "conquest:mountains", "conquest:mega_boreal_forest",
-            "twilightforest:dense_twilight_forest", "twilightforest:snowy_forest", "twilightforest:twilight_highlands");
+            "twilightforest:dense_twilight_forest", "twilightforest:snowy_forest", "twilightforest:twilight_highlands"};
 
     public EntityBokoblin (World worldIn)
     {
@@ -238,7 +238,7 @@ public class EntityBokoblin extends EntityMob {
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+        //this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
 //        if (this.rand.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F))
 //        {
 //            int i = this.rand.nextInt(3);

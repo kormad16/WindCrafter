@@ -17,9 +17,7 @@ public class RendererBokoblin extends RenderLiving<EntityBokoblin> {
     private static final ResourceLocation GREEN = new ResourceLocation("windcrafter:textures/entities/bokoblin_green.png");
     private static final ResourceLocation PINK = new ResourceLocation("windcrafter:textures/entities/bokoblin_pink.png");
 
-    public static final Factory FACTORY = new Factory();
-
-    private RendererBokoblin(RenderManager rendermanagerIn) {
+    public RendererBokoblin(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelBokoblin(), ModelBokoblin.SHADOW_SIZE);
         this.addLayer(new LayerHeldItem(this) {
             @Override
@@ -39,13 +37,6 @@ public class RendererBokoblin extends RenderLiving<EntityBokoblin> {
                 return PINK;
         }
         return BLUE;
-    }
-
-    public static class Factory implements IRenderFactory<EntityBokoblin> {
-        @Override
-        public Render<EntityBokoblin> createRenderFor(RenderManager manager) {
-            return new RendererBokoblin(manager);
-        }
     }
 
     public void transformHeldFull3DItemLayer() {
