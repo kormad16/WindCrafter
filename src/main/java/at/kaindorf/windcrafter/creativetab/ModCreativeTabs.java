@@ -1,6 +1,7 @@
 package at.kaindorf.windcrafter.creativetab;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
+import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
@@ -21,14 +22,14 @@ public class ModCreativeTabs {
     public static final CreativeTabs MOD_WEAPONS = (new CreativeTabs("mod_weapons") {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(CommonProxy.HEROS_SWORD);
+            return new ItemStack(ItemManager.HEROS_SWORD);
         }
     });
 
     public static final CreativeTabs MOD_OTHER = (new CreativeTabs("mod_other") {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(CommonProxy.TRIFORCESHARD[0]);
+            return new ItemStack(ItemManager.TRIFORCESHARD[0]);
         }
         @Override
         @SideOnly(Side.CLIENT)

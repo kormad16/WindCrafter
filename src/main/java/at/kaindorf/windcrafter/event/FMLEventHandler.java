@@ -12,7 +12,11 @@ public class FMLEventHandler {
     // Zelda Health System: Set hearts on init
     @SubscribeEvent
     public static void onPlayerJoinServer(PlayerEvent.PlayerLoggedInEvent e) {
-        e.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0f);
+        if(!e.player.getEntityData().hasKey("ZeldaHealthInit")) {
+            e.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0f);
+            e.player.setHealth(12.0f);
+            e.player.getEntityData().setBoolean("ZeldaHealthInit", true);
+        }
     }
 
 }
