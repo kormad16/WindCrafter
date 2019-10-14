@@ -2,7 +2,6 @@ package at.kaindorf.windcrafter.entities.renderers;
 
 import at.kaindorf.windcrafter.entities.enemies.EntityBokoblin;
 import at.kaindorf.windcrafter.entities.models.ModelBokoblin;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
