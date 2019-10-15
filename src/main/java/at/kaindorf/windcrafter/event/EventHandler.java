@@ -67,6 +67,17 @@ public class EventHandler {
             e.player.heal((float)health.getBaseValue());
             e.player.inventory.clearMatchingItems(ItemManager.HEARTCONTAINER, 0, 1, null);
         }
+
+        // Low Health Sound
+        if(!e.player.getEntityData().hasKey("LowHealthTimer"))
+            e.player.getEntityData().setByte("LowHealthTimer", (byte)0);
+        if(e.player.getHealth() < 4.0f && e.player.getHealth() > 0.0f) {
+            if(e.player.getEntityData().getByte("LowHealthTimer") == 0) {
+                e.player.playSound(SoundManager.lowHealthSoundEvent, 1.0f, 1.0f);
+                e.player.getEntityData().setByte("LowHealthTimer", (byte)100);
+            } else
+                e.player.getEntityData().setByte("LowHealthTimer", (byte)(e.player.getEntityData().getByte("LowHealthTimer")-1));
+        }
     }
 
 }
