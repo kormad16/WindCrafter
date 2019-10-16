@@ -13,5 +13,8 @@
   },
   "small_pickup": {
     "sounds": [ "windcrafter:smallpickup" ]
+  },
+  "zelda_error": {
+    "sounds": [ "windcrafter:error" ]
   }
 }

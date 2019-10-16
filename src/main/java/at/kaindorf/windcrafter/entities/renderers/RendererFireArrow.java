@@ -5,11 +5,11 @@ import net.minecraft.client.renderer.entity.RenderArrow;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RendererFirearrow extends RenderArrow<EntityFireArrow> {
+public class RendererFireArrow extends RenderArrow<EntityFireArrow> {
 
     public static final ResourceLocation FIREARROW = new ResourceLocation("windcrafter:textures/entities/firearrow.png");
 
-    public RendererFirearrow(RenderManager renderManagerIn) { super(renderManagerIn); }
+    public RendererFireArrow(RenderManager renderManagerIn) { super(renderManagerIn); }
 
     @Override
     protected ResourceLocation getEntityTexture(EntityFireArrow entity) {

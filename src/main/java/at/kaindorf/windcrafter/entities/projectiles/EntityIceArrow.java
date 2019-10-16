@@ -3,33 +3,36 @@ package at.kaindorf.windcrafter.entities.projectiles;
 import at.kaindorf.windcrafter.init.ItemManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-public class EntityFireArrow extends EntityArrow {
+public class EntityIceArrow extends EntityArrow {
 
-    public EntityFireArrow(World worldIn)
+    public EntityIceArrow(World worldIn)
     {
         super(worldIn);
     }
 
-    public EntityFireArrow(World worldIn, double x, double y, double z)
+    public EntityIceArrow(World worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
     }
 
-    public EntityFireArrow(World worldIn, EntityLivingBase shooter) { super(worldIn, shooter); }
+    public EntityIceArrow(World worldIn, EntityLivingBase shooter) { super(worldIn, shooter); }
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(ItemManager.FIREARROW);
+        return new ItemStack(ItemManager.ICEARROW);
     }
 
     @Override
     protected void arrowHit(EntityLivingBase living) {
         super.arrowHit(living);
-        living.setFire(5);
+        for(PotionEffect p : PotionTypes.SLOWNESS.getEffects())
+            living.addPotionEffect(new PotionEffect(p.getPotion(), 75, 50));
     }
 
     @Override
@@ -59,7 +62,7 @@ public class EntityFireArrow extends EntityArrow {
         {
             for (int j = 0; j < particleCount; ++j)
             {
-                this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0,-0.0125,0);
+                this.world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0,-0.00000001,0);
             }
         }
     }

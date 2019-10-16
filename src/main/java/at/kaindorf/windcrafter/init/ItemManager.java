@@ -33,15 +33,13 @@ public class ItemManager {
 
     // Magic Arrows
     public static Item FIREARROW = new ItemFireArrow();
+    public static Item ICEARROW = new ItemIceArrow();
 
     public static void registerItems(RegistryEvent.Register<Item> e) {
-        e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE, SMALLMAGIC, LARGEMAGIC, FIREARROW);
-        for(Item ms : MASTERSWORD)
-            e.getRegistry().register(ms);
-        for(Item ts : TRIFORCESHARD)
-            e.getRegistry().register(ts);
-        for(Item ew : ENEMYWEAPON)
-            e.getRegistry().register(ew);
+        e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE, SMALLMAGIC, LARGEMAGIC, FIREARROW, ICEARROW);
+        e.getRegistry().registerAll(MASTERSWORD);
+        e.getRegistry().registerAll(TRIFORCESHARD);
+        e.getRegistry().registerAll(ENEMYWEAPON);
     }
 
     public static void registerRenders(ModelRegistryEvent event) {
@@ -58,6 +56,8 @@ public class ItemManager {
         registerRender(SMALLMAGIC);
         registerRender(LARGEMAGIC);
         registerRender(FIREARROW);
+        registerRender(ICEARROW);
+
     }
 
     private static void registerRender(Item item) {
