@@ -2,8 +2,10 @@ package at.kaindorf.windcrafter.event;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
 import at.kaindorf.windcrafter.gui.GuiZeldaHealth;
+import at.kaindorf.windcrafter.gui.GuiZeldaMagic;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.init.SoundManager;
+import at.kaindorf.windcrafter.items.ItemMagicJar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -23,9 +25,12 @@ public class EventHandler {
         double health = e.getOriginal().getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
         e.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
         e.getEntityPlayer().setHealth((float)health);
+        e.getEntityPlayer().getEntityData().setFloat("ZeldaMagic", e.getOriginal().getEntityData().getFloat("ZeldaMagicMax"));
+        e.getEntityPlayer().getEntityData().setFloat("ZeldaMagicMax", e.getOriginal().getEntityData().getFloat("ZeldaMagicMax"));
     }
 
     private static final GuiZeldaHealth HEALTH_GUI = new GuiZeldaHealth(Minecraft.getMinecraft());
+    private static final GuiZeldaMagic MAGIC_GUI = new GuiZeldaMagic(Minecraft.getMinecraft());
 
     // Zelda Health System: Modified Health Display
     @SubscribeEvent
@@ -33,10 +38,13 @@ public class EventHandler {
         if(e.getType() == RenderGameOverlayEvent.ElementType.HEALTH) {
             e.setCanceled(true);
             HEALTH_GUI.drawHealth(e.getResolution().getScaledWidth(), e.getResolution().getScaledHeight());
+        } else if(e.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
+            e.setCanceled(true);
+            MAGIC_GUI.drawMagic(e.getResolution().getScaledWidth(), e.getResolution().getScaledHeight());
         }
     }
 
-    // Zelda Health System: Pickup Event
+    // Player Tick Event
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
         // Heart
@@ -66,6 +74,31 @@ public class EventHandler {
                 health.setBaseValue(health.getBaseValue() + 2);
             e.player.heal((float)health.getBaseValue());
             e.player.inventory.clearMatchingItems(ItemManager.HEARTCONTAINER, 0, 1, null);
+        }
+        // Magic Init
+        if(!e.player.getEntityData().hasKey("ZeldaMagic") || e.player.getEntityData().getInteger("ZeldaMagicMax") == 0) {
+            e.player.getEntityData().setInteger("ZeldaMagic", 100);
+            e.player.getEntityData().setInteger("ZeldaMagicMax", 100);
+        }
+        // Small Magic Jar
+        while(e.player.inventory.hasItemStack(new ItemStack(ItemManager.SMALLMAGIC))) {
+            e.player.playSound(SoundManager.smallPickupSoundEvent, 1.0f, 1.0f);
+            if(e.player.getEntityData().getInteger("ZeldaMagic") < e.player.getEntityData().getInteger("ZeldaMagicMax")) {
+                e.player.getEntityData().setInteger("ZeldaMagic", e.player.getEntityData().getInteger("ZeldaMagic") + 20);
+                if (e.player.getEntityData().getInteger("ZeldaMagic") > e.player.getEntityData().getInteger("ZeldaMagicMax"))
+                    e.player.getEntityData().setInteger("ZeldaMagic", e.player.getEntityData().getInteger("ZeldaMagicMax"));
+            }
+            e.player.inventory.clearMatchingItems(ItemManager.SMALLMAGIC, 0, 1, null);
+        }
+        // Large Magic Jar
+        while(e.player.inventory.hasItemStack(new ItemStack(ItemManager.LARGEMAGIC))) {
+            e.player.playSound(SoundManager.smallPickupSoundEvent, 1.0f, 1.0f);
+            if(e.player.getEntityData().getInteger("ZeldaMagic") < e.player.getEntityData().getInteger("ZeldaMagicMax")) {
+                e.player.getEntityData().setInteger("ZeldaMagic", e.player.getEntityData().getInteger("ZeldaMagic") + 50);
+                if (e.player.getEntityData().getInteger("ZeldaMagic") > e.player.getEntityData().getInteger("ZeldaMagicMax"))
+                    e.player.getEntityData().setInteger("ZeldaMagic", e.player.getEntityData().getInteger("ZeldaMagicMax"));
+            }
+            e.player.inventory.clearMatchingItems(ItemManager.LARGEMAGIC, 0, 1, null);
         }
 
         // Low Health Sound

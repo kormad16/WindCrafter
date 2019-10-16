@@ -19,9 +19,11 @@ public class ItemManager {
     public static Item HEARTPIECE = new ItemHeartPiece();
     public static Item[] ENEMYWEAPON = new Item[ItemEnemyWeapon.ids.length];
     static { for(int i = 0; i < ENEMYWEAPON.length; i++) ENEMYWEAPON[i] = new ItemEnemyWeapon(i); }
+    public static Item SMALLMAGIC = new ItemMagicJar(false);
+    public static Item LARGEMAGIC = new ItemMagicJar(true);
 
     public static void registerItems(RegistryEvent.Register<Item> e) {
-        e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE);
+        e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE, SMALLMAGIC, LARGEMAGIC);
         for(Item ms : MASTERSWORD)
             e.getRegistry().register(ms);
         for(Item ts : TRIFORCESHARD)
@@ -41,6 +43,8 @@ public class ItemManager {
         registerRender(HEARTPIECE);
         for(Item ew : ENEMYWEAPON)
             registerRender(ew);
+        registerRender(SMALLMAGIC);
+        registerRender(LARGEMAGIC);
     }
 
     private static void registerRender(Item item) {

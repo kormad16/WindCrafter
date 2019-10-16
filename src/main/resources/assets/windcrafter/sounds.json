@@ -10,5 +10,8 @@
   },
   "low_health": {
     "sounds": [ "windcrafter:lowhealth" ]
+  },
+  "small_pickup": {
+    "sounds": [ "windcrafter:smallpickup" ]
   }
 }
