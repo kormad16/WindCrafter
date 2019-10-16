@@ -2,10 +2,13 @@ package at.kaindorf.windcrafter.init;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
 import at.kaindorf.windcrafter.entities.enemies.EntityBokoblin;
+import at.kaindorf.windcrafter.entities.projectiles.EntityFireArrow;
 import at.kaindorf.windcrafter.entities.renderers.RendererBokoblin;
+import at.kaindorf.windcrafter.entities.renderers.RendererFirearrow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
@@ -28,8 +31,17 @@ public class EntityManager {
         event.getRegistry().register(getEntityWithSpawnEgg(
                 EntityBokoblin.class, "bokoblin", 80, 3, true, 0x213C39, 0x526D7B, EnumCreatureType.MONSTER, 1000, 1, 5, getBiomesFromStrings(EntityBokoblin.BIOMES)
         ).build());
+        event.getRegistry().register(getEntity(EntityFireArrow.class, "firearrow", 64, 5, true).build());
         System.out.println("MOD STUFF ========================================");
         System.out.println(Arrays.toString(getBiomesFromStrings(EntityBokoblin.BIOMES)));
+    }
+
+    public static EntityEntryBuilder<Entity> getEntity(Class<? extends EntityArrow> entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates) {
+        return EntityEntryBuilder.create()
+                .entity(entityClass)
+                .id(new ResourceLocation(WindcrafterMod.MODID, entityName), nextEntityId++)
+                .name(entityName)
+                .tracker(trackingRange, updateFrequency, sendsVelocityUpdates);
     }
 
     public static EntityEntryBuilder<Entity> getEntity(Class<? extends EntityLiving> entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, EnumCreatureType enumCreatureType, int spawnWeight, int spawnMin, int spawnMax, Biome[] biomes) {
@@ -56,6 +68,7 @@ public class EntityManager {
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         RenderingRegistry.registerEntityRenderingHandler(EntityBokoblin.class, RendererBokoblin::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityFireArrow.class, RendererFirearrow::new);
     }
 
 }
