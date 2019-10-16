@@ -18,5 +18,7 @@ item.heartcontainer.name=Heart Container
 item.heartpiece.name=Heart Piece
 item.bokostick.name=Boko Stick
 item.darknut_sword.name=Darknut Sword
+item.smallmagic.name=Small Magic Jar
+item.largemagic.name=Large Magic Jar
 
 entity.bokoblin.name=Bokoblin

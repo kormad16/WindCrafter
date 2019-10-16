@@ -17,6 +17,10 @@ public class FMLEventHandler {
             e.player.setHealth(12.0f);
             e.player.getEntityData().setBoolean("ZeldaHealthInit", true);
         }
+        if(!e.player.getEntityData().hasKey("ZeldaMagic") || e.player.getEntityData().getInteger("ZeldaMagicMax") == 0) {
+            e.player.getEntityData().setInteger("ZeldaMagic", 100);
+            e.player.getEntityData().setInteger("ZeldaMagicMax", 100);
+        }
     }
 
 }

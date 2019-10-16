@@ -2,6 +2,7 @@ package at.kaindorf.windcrafter.items;
 
 import at.kaindorf.windcrafter.creativetab.ModCreativeTabs;
 import com.google.common.collect.Multimap;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -9,6 +10,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ItemMasterSword extends ItemSword {
 
@@ -43,11 +46,9 @@ public class ItemMasterSword extends ItemSword {
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
-    {
-        if(durability[level] > -1   )
-            stack.damageItem(1, attacker);
-        return true;
+    public void setDamage(ItemStack stack, int damage) {
+        if(durability[level] > -1)
+            super.setDamage(stack, damage);
     }
 
     @Override
