@@ -5,9 +5,6 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -23,13 +20,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class EntityBokoblin extends EntityMob {
     /** The attribute which determines the chance that this mob will spawn reinforcements */
@@ -41,7 +35,7 @@ public class EntityBokoblin extends EntityMob {
 
     private static final DataParameter<Byte> PROFESSION = EntityDataManager.<Byte>createKey(EntityBokoblin.class, DataSerializers.BYTE);
 
-    public static final List<String> BIOMES = Lists.newArrayList("minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:mutated_birch_forest",
+    public static final String[] BIOMES = {"minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:mutated_birch_forest",
             "minecraft:mutated_birch_forest_hills", "minecraft:forest", "minecraft:forest_hills", "minecraft:mutated_forest",
             "minecraft:taiga", "minecraft:taiga_hills", "minecraft:mutated_taiga", "minecraft:redwood_taiga", "minecraft:redwood_taiga_hills",
             "minecraft:mutated_redwood_taiga", "minecraft:mutated_redwood_taiga_hills", "minecraft:taiga_cold", "minecraft:taiga_cold_hills",
@@ -57,12 +51,12 @@ public class EntityBokoblin extends EntityMob {
             "traverse:snowy_coniferous_forest", "traverse:temperate_rainforest", "traverse:woodlands",
             "conquest:boreal_forest", "conquest:birch_forest", "conquest:deciduous_forest", "conquest:oldgrowth_forest", "conquest:lorein_forest",
             "conquest:mountains", "conquest:mega_boreal_forest",
-            "twilightforest:dense_twilight_forest", "twilightforest:snowy_forest", "twilightforest:twilight_highlands");
+            "twilightforest:dense_twilight_forest", "twilightforest:snowy_forest", "twilightforest:twilight_highlands"};
 
     public EntityBokoblin (World worldIn)
     {
         super(worldIn);
-        this.setSize(0.6F, 1.7F);
+        this.setSize(0.6F, 1.6F);
     }
 
     protected void initEntityAI()
@@ -127,10 +121,6 @@ public class EntityBokoblin extends EntityMob {
      */
     protected int getExperiencePoints(EntityPlayer player)
     {
-        if (this.isChild())
-        {
-            this.experienceValue = (int)((float)this.experienceValue * 2.5F);
-        }
         return super.getExperiencePoints(player);
     }
 
@@ -185,14 +175,12 @@ public class EntityBokoblin extends EntityMob {
      */
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
-        System.out.println(amount+" - "+getHealth());
         return super.attackEntityFrom(source, amount);
     }
 
     public boolean attackEntityAsMob(Entity entityIn)
     {
         boolean flag = super.attackEntityAsMob(entityIn);
-
         if (flag)
         {
             float f = this.world.getDifficultyForLocation(new BlockPos(this)).getAdditionalDifficulty();
@@ -202,7 +190,6 @@ public class EntityBokoblin extends EntityMob {
                 entityIn.setFire(2 * (int)f);
             }
         }
-
         return flag;
     }
 
@@ -223,7 +210,7 @@ public class EntityBokoblin extends EntityMob {
 
     protected SoundEvent getStepSound()
     {
-        return SoundEvents.ENTITY_ZOMBIE_STEP;
+        return SoundEvents.ENTITY_WOLF_STEP;
     }
 
     protected void playStepSound(BlockPos pos, Block blockIn)
@@ -236,13 +223,13 @@ public class EntityBokoblin extends EntityMob {
      */
     public EnumCreatureAttribute getCreatureAttribute()
     {
-        return EnumCreatureAttribute.UNDEAD;
+        return EnumCreatureAttribute.ILLAGER;
     }
 
     @Nullable
     protected ResourceLocation getLootTable()
     {
-        return LootTableList.ENTITIES_ZOMBIE;
+        return LootTableList.EMPTY;
     }
 
     /**
@@ -251,20 +238,20 @@ public class EntityBokoblin extends EntityMob {
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
         super.setEquipmentBasedOnDifficulty(difficulty);
-
-        if (this.rand.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F))
-        {
-            int i = this.rand.nextInt(3);
-
-            if (i == 0)
-            {
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-            }
-            else
-            {
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
-            }
-        }
+        //this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+//        if (this.rand.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F))
+//        {
+//            int i = this.rand.nextInt(3);
+//
+//            if (i == 0)
+//            {
+//                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+//            }
+//            else
+//            {
+//                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
+//            }
+//        }
     }
 
     /**
@@ -273,6 +260,7 @@ public class EntityBokoblin extends EntityMob {
     public void writeEntityToNBT(NBTTagCompound compound)
     {
         super.writeEntityToNBT(compound);
+        compound.setByte("Profession", (byte)this.getProfession());
     }
 
     /**
@@ -281,6 +269,7 @@ public class EntityBokoblin extends EntityMob {
     public void readEntityFromNBT(NBTTagCompound compound)
     {
         super.readEntityFromNBT(compound);
+        this.setProfession(compound.getByte("Profession"));
     }
 
     /**
@@ -293,12 +282,13 @@ public class EntityBokoblin extends EntityMob {
 
     public float getEyeHeight()
     {
-        return 1.65F;
+        return 1.45F;
     }
 
     protected boolean canEquipItem(ItemStack stack)
     {
-        return stack.getItem() == Items.EGG && this.isChild() && this.isRiding() ? false : super.canEquipItem(stack);
+        return true;
+        //return /*stack.getItem() == Items.EGG &&*/ this.isRiding() ? false : super.canEquipItem(stack);
     }
 
     /**
@@ -315,7 +305,7 @@ public class EntityBokoblin extends EntityMob {
         this.setProfession((byte)this.rand.nextInt(3));
 
         this.setEquipmentBasedOnDifficulty(difficulty);
-        this.setEnchantmentBasedOnDifficulty(difficulty);
+//        this.setEnchantmentBasedOnDifficulty(difficulty);
 
 //        if (this.rand.nextFloat() < f * 0.05F)
 //        {

@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 
 @Mod.EventBusSubscriber(modid = WindcrafterMod.MODID)
 public class CommonProxy {
@@ -27,11 +28,15 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent e) {
-        EntityManager.initEntities();
     }
 
     public void postinit(FMLPostInitializationEvent e) {
 
+    }
+
+    @SubscribeEvent
+    public static void entityRegistration(RegistryEvent.Register<EntityEntry> e) {
+        EntityManager.initEntities(e);
     }
 
     @SubscribeEvent
