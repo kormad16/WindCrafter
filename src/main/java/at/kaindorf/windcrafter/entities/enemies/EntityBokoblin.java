@@ -1,6 +1,7 @@
 package at.kaindorf.windcrafter.entities.enemies;
 
 import at.kaindorf.windcrafter.entities.ai.EntityAIAttackBokoblin;
+import at.kaindorf.windcrafter.init.ItemManager;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
@@ -35,23 +36,14 @@ public class EntityBokoblin extends EntityMob {
 
     private static final DataParameter<Byte> PROFESSION = EntityDataManager.<Byte>createKey(EntityBokoblin.class, DataSerializers.BYTE);
 
-    public static final String[] BIOMES = {"minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:mutated_birch_forest",
+    public static final String[] BIOMES = {
+            "minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:mutated_birch_forest",
             "minecraft:mutated_birch_forest_hills", "minecraft:forest", "minecraft:forest_hills", "minecraft:mutated_forest",
             "minecraft:taiga", "minecraft:taiga_hills", "minecraft:mutated_taiga", "minecraft:redwood_taiga", "minecraft:redwood_taiga_hills",
             "minecraft:mutated_redwood_taiga", "minecraft:mutated_redwood_taiga_hills", "minecraft:taiga_cold", "minecraft:taiga_cold_hills",
             "minecraft:mutated_taiga_cold", "minecraft:extreme_hills", "minecraft:smaller_extreme_hills", "minecraft:extreme_hills_with_trees",
-            "minecraft:mutated_extreme_hills", "minecraft:mutated_extreme_hills_with_trees", "minecraft:roofed_forest", "minecraft:mutated_roofed_forest",
-
-            "biomesoplenty:boreal_forest", "biomesoplenty:coniferous_forest", "biomesoplenty:dead_forest", "biomesoplenty:grove", "biomesoplenty:maple_woods",
-            "biomesoplenty:mountain_foothills", "biomesoplenty:redwood_forest", "biomesoplenty:redwood_forest", "biomesoplenty:seasonal_forest",
-            "biomesoplenty:shield", "biomesoplenty:snowy_coniferous_forest", "biomesoplenty:snowy_forest", "biomesoplenty:temperate_rainforest",
-            "biomesoplenty:woodland",
-
-            "traverse:autumnal_woods", "traverse:autumnal_wooded_hills", "traverse:birch_forested_hills", "traverse:foreseted_hills",
-            "traverse:snowy_coniferous_forest", "traverse:temperate_rainforest", "traverse:woodlands",
-            "conquest:boreal_forest", "conquest:birch_forest", "conquest:deciduous_forest", "conquest:oldgrowth_forest", "conquest:lorein_forest",
-            "conquest:mountains", "conquest:mega_boreal_forest",
-            "twilightforest:dense_twilight_forest", "twilightforest:snowy_forest", "twilightforest:twilight_highlands"};
+            "minecraft:mutated_extreme_hills", "minecraft:mutated_extreme_hills_with_trees", "minecraft:roofed_forest", "minecraft:mutated_roofed_forest"
+    };
 
     public EntityBokoblin (World worldIn)
     {
@@ -175,6 +167,9 @@ public class EntityBokoblin extends EntityMob {
      */
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
+        System.out.println(amount);
+        if (this.isBurning() && this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem().equals(Items.SHIELD))
+            this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.AIR));
         return super.attackEntityFrom(source, amount);
     }
 
@@ -238,7 +233,17 @@ public class EntityBokoblin extends EntityMob {
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
         super.setEquipmentBasedOnDifficulty(difficulty);
-        //this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+        switch (getProfession() % 3) {
+            case 0:
+                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemManager.BOKOSTICK));
+                break;
+            case 1:
+                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemManager.HEROS_SWORD));
+                this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
+                break;
+            case 2:
+        }
+//        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
 //        if (this.rand.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F))
 //        {
 //            int i = this.rand.nextInt(3);
@@ -303,7 +308,6 @@ public class EntityBokoblin extends EntityMob {
         this.setCanPickUpLoot(true);
 
         this.setProfession((byte)this.rand.nextInt(3));
-
         this.setEquipmentBasedOnDifficulty(difficulty);
 //        this.setEnchantmentBasedOnDifficulty(difficulty);
 

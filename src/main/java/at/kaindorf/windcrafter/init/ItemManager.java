@@ -24,8 +24,8 @@ public class ItemManager {
     public static Item HEARTPIECE = new ItemHeartPiece();
 
     // Enemy Weapons
-    public static Item[] ENEMYWEAPON = new Item[ItemEnemyWeapon.ids.length];
-    static { for(int i = 0; i < ENEMYWEAPON.length; i++) ENEMYWEAPON[i] = new ItemEnemyWeapon(i); }
+    public static Item BOKOSTICK = new ItemEnemyWeapon(0);
+    public static Item DARKNUT_SWORD = new ItemEnemyWeapon(1);
 
     // Magic System
     public static Item SMALLMAGIC = new ItemMagicJar(false);
@@ -34,12 +34,12 @@ public class ItemManager {
     // Magic Arrows
     public static Item FIREARROW = new ItemFireArrow();
     public static Item ICEARROW = new ItemIceArrow();
+    public static Item LIGHTARROW = new ItemLightArrow();
 
     public static void registerItems(RegistryEvent.Register<Item> e) {
-        e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE, SMALLMAGIC, LARGEMAGIC, FIREARROW, ICEARROW);
+        e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE, SMALLMAGIC, LARGEMAGIC, FIREARROW, ICEARROW, LIGHTARROW, BOKOSTICK, DARKNUT_SWORD);
         e.getRegistry().registerAll(MASTERSWORD);
         e.getRegistry().registerAll(TRIFORCESHARD);
-        e.getRegistry().registerAll(ENEMYWEAPON);
     }
 
     public static void registerRenders(ModelRegistryEvent event) {
@@ -51,13 +51,13 @@ public class ItemManager {
         registerRender(HEART);
         registerRender(HEARTCONTAINER);
         registerRender(HEARTPIECE);
-        for(Item ew : ENEMYWEAPON)
-            registerRender(ew);
+        registerRender(BOKOSTICK);
+        registerRender(DARKNUT_SWORD);
         registerRender(SMALLMAGIC);
         registerRender(LARGEMAGIC);
         registerRender(FIREARROW);
         registerRender(ICEARROW);
-
+        registerRender(LIGHTARROW);
     }
 
     private static void registerRender(Item item) {

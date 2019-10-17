@@ -22,5 +22,6 @@ item.smallmagic.name=Small Magic Jar
 item.largemagic.name=Large Magic Jar
 item.icearrow.name=Ice Arrow
 item.firearrow.name=Fire Arrow
+item.lightarrow.name=Light Arrow
 
 entity.bokoblin.name=Bokoblin
