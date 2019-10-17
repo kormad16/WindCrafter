@@ -25,12 +25,12 @@ public class EventHandler {
         double health = e.getOriginal().getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
         e.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
         e.getEntityPlayer().setHealth((float)health);
-        e.getEntityPlayer().getEntityData().setFloat("ZeldaMagic", e.getOriginal().getEntityData().getFloat("ZeldaMagicMax"));
-        e.getEntityPlayer().getEntityData().setFloat("ZeldaMagicMax", e.getOriginal().getEntityData().getFloat("ZeldaMagicMax"));
+        e.getEntityPlayer().getEntityData().setInteger("ZeldaMagic", e.getOriginal().getEntityData().getInteger("ZeldaMagicMax"));
+        e.getEntityPlayer().getEntityData().setInteger("ZeldaMagicMax", e.getOriginal().getEntityData().getInteger("ZeldaMagicMax"));
     }
 
-    private static final GuiZeldaHealth HEALTH_GUI = new GuiZeldaHealth(Minecraft.getMinecraft());
-    private static final GuiZeldaMagic MAGIC_GUI = new GuiZeldaMagic(Minecraft.getMinecraft());
+    public static final GuiZeldaHealth HEALTH_GUI = new GuiZeldaHealth(Minecraft.getMinecraft());
+    public static final GuiZeldaMagic MAGIC_GUI = new GuiZeldaMagic(Minecraft.getMinecraft());
 
     // Zelda Health System: Modified Health Display
     @SubscribeEvent

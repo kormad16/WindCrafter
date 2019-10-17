@@ -20,5 +20,7 @@ item.bokostick.name=Boko Stick
 item.darknut_sword.name=Darknut Sword
 item.smallmagic.name=Small Magic Jar
 item.largemagic.name=Large Magic Jar
+item.icearrow.name=Ice Arrow
+item.firearrow.name=Fire Arrow
 
 entity.bokoblin.name=Bokoblin

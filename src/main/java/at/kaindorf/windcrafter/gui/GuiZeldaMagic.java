@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiZeldaMagic extends GuiIngame {
 
@@ -15,23 +16,22 @@ public class GuiZeldaMagic extends GuiIngame {
         if(this.mc.player.capabilities.isCreativeMode)
             return;
 
+        this.mc.mcProfiler.startSection("magicMeter");
+
         this.mc.getTextureManager().bindTexture(Gui.ICONS);
-        int i = this.mc.player.xpBarCap();
 
-        if (i > 0)
+        int k = 0;
+        if(this.mc.player.getEntityData().getInteger("ZeldaMagicMax") > 0)
+            k = (int)(183.0f*(((double)(this.mc.player.getEntityData().getInteger("ZeldaMagic")) / (double)(this.mc.player.getEntityData().getInteger("ZeldaMagicMax"))) / (double)(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")==100?2:1)));
+        int l = 16 + (this.mc.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue() > 20 ? 10 : 0);
+        this.drawTexturedModalRect(5, l, 0, 64, 182/(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")==100?2:1), 5);
+        System.out.println("Magic: " + (double)(this.mc.player.getEntityData().getInteger("ZeldaMagic")));
+        System.out.println("MagicMax: " + (double)(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")));
+        System.out.println("Divider: " + (double)(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")==100?2:1));
+        System.out.println(k);
+        if (k > 0)
         {
-            int j = 182;
-            int k = 91;
-            try {
-                k = (int) ((this.mc.player.getEntityData().getInteger("ZeldaMagic") / this.mc.player.getEntityData().getInteger("ZeldaMagicMax")) * 183.0F) / (this.mc.player.getEntityData().getInteger("ZeldaMagicMax") == 100 ? 2 : 1);
-            } catch(ArithmeticException e) {}
-            int l = 16 + (this.mc.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue() > 20 ? 10 : 0);
-            this.drawTexturedModalRect(5, l, 0, 64, 182/(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")==100?2:1), 5);
-
-            if (k > 0)
-            {
-                this.drawTexturedModalRect(5, l, 0, 69, k, 5);
-            }
+            this.drawTexturedModalRect(5, l, 0, 69, k, 5);
         }
 
         this.mc.mcProfiler.endSection();
