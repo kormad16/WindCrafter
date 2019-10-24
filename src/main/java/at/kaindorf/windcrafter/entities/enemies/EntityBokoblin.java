@@ -2,7 +2,6 @@ package at.kaindorf.windcrafter.entities.enemies;
 
 import at.kaindorf.windcrafter.entities.ai.EntityAIAttackBokoblin;
 import at.kaindorf.windcrafter.init.ItemManager;
-import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -22,7 +21,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
 import javax.annotation.Nullable;
 
@@ -37,9 +35,8 @@ public class EntityBokoblin extends EntityMob {
     private static final DataParameter<Byte> PROFESSION = EntityDataManager.<Byte>createKey(EntityBokoblin.class, DataSerializers.BYTE);
 
     public static final String[] BIOMES = {
-            "minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:mutated_birch_forest",
-            "minecraft:mutated_birch_forest_hills", "minecraft:forest", "minecraft:forest_hills", "minecraft:mutated_forest",
-            "minecraft:taiga", "minecraft:taiga_hills", "minecraft:mutated_taiga", "minecraft:redwood_taiga", "minecraft:redwood_taiga_hills",
+            "minecraft:plains", "minecraft:desert", "minecraft:extreme_hills", "minecraft:forest", "minecraft:taiga", "minecraft:swampland",
+            "minecraft:mutated_forest", "minecraft:taiga", "minecraft:taiga_hills", "minecraft:mutated_taiga", "minecraft:redwood_taiga", "minecraft:redwood_taiga_hills",
             "minecraft:mutated_redwood_taiga", "minecraft:mutated_redwood_taiga_hills", "minecraft:taiga_cold", "minecraft:taiga_cold_hills",
             "minecraft:mutated_taiga_cold", "minecraft:extreme_hills", "minecraft:smaller_extreme_hills", "minecraft:extreme_hills_with_trees",
             "minecraft:mutated_extreme_hills", "minecraft:mutated_extreme_hills_with_trees", "minecraft:roofed_forest", "minecraft:mutated_roofed_forest"
@@ -64,7 +61,7 @@ public class EntityBokoblin extends EntityMob {
 
     protected void applyEntityAI()
     {
-        this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
+        //this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] {EntityPigZombie.class}));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
     }
@@ -74,7 +71,7 @@ public class EntityBokoblin extends EntityMob {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(14.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(35.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.38D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.36D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
 //        this.getAttributeMap().registerAttribute(SPAWN_REINFORCEMENTS_CHANCE).setBaseValue(this.rand.nextDouble() * net.minecraftforge.common.ForgeModContainer.zombieSummonBaseChance);
@@ -167,7 +164,6 @@ public class EntityBokoblin extends EntityMob {
      */
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
-        System.out.println(amount);
         if (this.isBurning() && this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem().equals(Items.SHIELD))
             this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.AIR));
         return super.attackEntityFrom(source, amount);
