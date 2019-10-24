@@ -25,7 +25,7 @@ public class EntityLightArrow extends EntityArrow {
 
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(ItemManager.ICEARROW);
+        return new ItemStack(ItemManager.LIGHTARROW);
     }
 
     @Override

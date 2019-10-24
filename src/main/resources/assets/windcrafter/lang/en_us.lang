@@ -2,9 +2,11 @@ itemGroup.mod_weapons=Windcrafter Weapons
 itemGroup.mod_other=Windcrafter Miscellaneous
 
 item.heros_sword.name=Hero's Sword
+
 item.mastersword1.name=Master Sword
 item.mastersword2.name=Master Sword
 item.mastersword3.name=Master Sword
+
 item.triforceshard1.name=Triforce Shard
 item.triforceshard2.name=Triforce Shard
 item.triforceshard3.name=Triforce Shard
@@ -13,13 +15,18 @@ item.triforceshard5.name=Triforce Shard
 item.triforceshard6.name=Triforce Shard
 item.triforceshard7.name=Triforce Shard
 item.triforceshard8.name=Triforce Shard
+
 item.heart.name=Heart
 item.heartcontainer.name=Heart Container
 item.heartpiece.name=Heart Piece
+
 item.bokostick.name=Boko Stick
 item.darknut_sword.name=Darknut Sword
+item.moblin_spear.name=Moblin Spear
+
 item.smallmagic.name=Small Magic Jar
 item.largemagic.name=Large Magic Jar
+
 item.icearrow.name=Ice Arrow
 item.firearrow.name=Fire Arrow
 item.lightarrow.name=Light Arrow
