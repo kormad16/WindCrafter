@@ -25,5 +25,14 @@
   },
   "entity.windcrafter.bokoblin.death": {
     "sounds": [ "windcrafter:bokoblin/death" ]
+  },
+  "entity.windcrafter.moblin.ambient": {
+    "sounds": [ "windcrafter:moblin/ambient" ]
+  },
+  "entity.windcrafter.moblin.hurt": {
+    "sounds": [ "windcrafter:moblin/hurt" ]
+  },
+  "entity.windcrafter.moblin.death": {
+    "sounds": [ "windcrafter:moblin/death" ]
   }
 }
