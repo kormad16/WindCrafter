@@ -16,5 +16,14 @@
   },
   "zelda_error": {
     "sounds": [ "windcrafter:error" ]
+  },
+  "entity.windcrafter.bokoblin.ambient": {
+    "sounds": [ "windcrafter:bokoblin/ambient" ]
+  },
+  "entity.windcrafter.bokoblin.hurt": {
+    "sounds": [ "windcrafter:bokoblin/hurt" ]
+  },
+  "entity.windcrafter.bokoblin.death": {
+    "sounds": [ "windcrafter:bokoblin/death" ]
   }
 }

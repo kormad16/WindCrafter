@@ -2,6 +2,7 @@ package at.kaindorf.windcrafter.entities.enemies;
 
 import at.kaindorf.windcrafter.entities.ai.EntityAIAttackBokoblin;
 import at.kaindorf.windcrafter.init.ItemManager;
+import at.kaindorf.windcrafter.init.SoundManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -186,22 +187,22 @@ public class EntityBokoblin extends EntityMob {
 
     protected SoundEvent getAmbientSound()
     {
-        return SoundEvents.ENTITY_ZOMBIE_AMBIENT;
+        return SoundManager.bokoblinAmbient;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn)
     {
-        return SoundEvents.ENTITY_ZOMBIE_HURT;
+        return SoundManager.bokoblinHurt;
     }
 
     protected SoundEvent getDeathSound()
     {
-        return SoundEvents.ENTITY_ZOMBIE_DEATH;
+        return SoundManager.bokoblinDeath;
     }
 
     protected SoundEvent getStepSound()
     {
-        return SoundEvents.ENTITY_WOLF_STEP;
+        return SoundEvents.ENTITY_ZOMBIE_STEP;
     }
 
     protected void playStepSound(BlockPos pos, Block blockIn)
