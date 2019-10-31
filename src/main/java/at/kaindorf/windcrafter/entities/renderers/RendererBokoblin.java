@@ -3,13 +3,11 @@ package at.kaindorf.windcrafter.entities.renderers;
 import at.kaindorf.windcrafter.entities.enemies.EntityBokoblin;
 import at.kaindorf.windcrafter.entities.models.ModelBokoblin;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class RendererBokoblin extends RenderLiving<EntityBokoblin> {
 

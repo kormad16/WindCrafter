@@ -13,4 +13,15 @@ public class SoundManager {
     public static final SoundEvent smallPickupSoundEvent = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "small_pickup"));
     public static final SoundEvent errorSoundEvent = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "zelda_error"));
 
+    // Entities
+    // Mobs
+    // Bokoblin
+    public static final SoundEvent bokoblinAmbient = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "entity.windcrafter.bokoblin.ambient"));
+    public static final SoundEvent bokoblinHurt = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "entity.windcrafter.bokoblin.hurt"));
+    public static final SoundEvent bokoblinDeath = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "entity.windcrafter.bokoblin.death"));
+    // Moblin
+    public static final SoundEvent moblinAmbient = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "entity.windcrafter.moblin.ambient"));
+    public static final SoundEvent moblinnHurt = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "entity.windcrafter.moblin.hurt"));
+    public static final SoundEvent moblinDeath = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "entity.windcrafter.moblin.death"));
+
 }
