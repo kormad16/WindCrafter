@@ -244,7 +244,7 @@ public class EntityMoblin extends EntityMob {
 
     public float getEyeHeight()
     {
-        return 1.8F;
+        return 1.79F;
     }
 
     protected boolean canEquipItem(ItemStack stack)
