@@ -44,7 +44,7 @@ public class EntityMoblin extends EntityMob {
     public EntityMoblin(World worldIn)
     {
         super(worldIn);
-        this.setSize(0.6F, 1.6F);
+        this.setSize(0.6F, 1.95F);
     }
 
     protected void initEntityAI()
@@ -215,6 +215,7 @@ public class EntityMoblin extends EntityMob {
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
         super.setEquipmentBasedOnDifficulty(difficulty);
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.AIR)); // ToDo: add Speer
     }
 
     /**
@@ -243,7 +244,7 @@ public class EntityMoblin extends EntityMob {
 
     public float getEyeHeight()
     {
-        return 1.45F;
+        return 1.79F;
     }
 
     protected boolean canEquipItem(ItemStack stack)
