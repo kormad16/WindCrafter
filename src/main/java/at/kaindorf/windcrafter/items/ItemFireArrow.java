@@ -27,11 +27,13 @@ public class ItemFireArrow extends ItemArrow {
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
         try {
             EntityPlayer p = (EntityPlayer)shooter;
-            if(p.getEntityData().getInteger("ZeldaMagic") < 5) {
-                p.playSound(SoundManager.errorSoundEvent, 1.0f, 1.0f);
-                return new EntityTippedArrow(worldIn, shooter);
-            } else {
-                p.getEntityData().setInteger("ZeldaMagic", shooter.getEntityData().getInteger("ZeldaMagic") - 5);
+            if(!p.isCreative()) {
+                if (p.getEntityData().getInteger("ZeldaMagic") < 5) {
+                    p.playSound(SoundManager.errorSoundEvent, 1.0f, 1.0f);
+                    return new EntityTippedArrow(worldIn, shooter);
+                } else {
+                    p.getEntityData().setInteger("ZeldaMagic", shooter.getEntityData().getInteger("ZeldaMagic") - 5);
+                }
             }
         } catch(Exception e) {}
         return new EntityFireArrow(worldIn, shooter);

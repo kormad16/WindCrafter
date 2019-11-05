@@ -26,6 +26,7 @@ public class ItemManager {
     // Enemy Weapons
     public static Item BOKOSTICK = new ItemEnemyWeapon(0);
     public static Item DARKNUT_SWORD = new ItemEnemyWeapon(1);
+    public static Item MOBLIN_SPEAR = new ItemEnemyWeapon(2);
 
     // Magic System
     public static Item SMALLMAGIC = new ItemMagicJar(false);
@@ -37,24 +38,31 @@ public class ItemManager {
     public static Item LIGHTARROW = new ItemLightArrow();
 
     public static void registerItems(RegistryEvent.Register<Item> e) {
-        e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE, SMALLMAGIC, LARGEMAGIC, FIREARROW, ICEARROW, LIGHTARROW, BOKOSTICK, DARKNUT_SWORD);
+        e.getRegistry().registerAll(HEROS_SWORD, HEART, HEARTCONTAINER, HEARTPIECE, SMALLMAGIC, LARGEMAGIC, FIREARROW, ICEARROW, LIGHTARROW, BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR);
         e.getRegistry().registerAll(MASTERSWORD);
         e.getRegistry().registerAll(TRIFORCESHARD);
     }
 
     public static void registerRenders(ModelRegistryEvent event) {
         registerRender(HEROS_SWORD);
+
         for(Item ms : MASTERSWORD)
             registerRender(ms);
+
         for(Item ts : TRIFORCESHARD)
             registerRender(ts);
+
         registerRender(HEART);
         registerRender(HEARTCONTAINER);
         registerRender(HEARTPIECE);
+
         registerRender(BOKOSTICK);
         registerRender(DARKNUT_SWORD);
+        registerRender(MOBLIN_SPEAR);
+
         registerRender(SMALLMAGIC);
         registerRender(LARGEMAGIC);
+
         registerRender(FIREARROW);
         registerRender(ICEARROW);
         registerRender(LIGHTARROW);
