@@ -26,10 +26,10 @@ public class ModCreativeTabs {
         }
     });
 
-    public static final CreativeTabs MOD_OTHER = (new CreativeTabs("mod_other") {
+    public static final CreativeTabs MOD_MOBS = (new CreativeTabs("mod_mobs") {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(ItemManager.TRIFORCESHARD[0]);
+            return new ItemStack(Items.SKULL);
         }
         @Override
         @SideOnly(Side.CLIENT)
@@ -44,6 +44,13 @@ public class ModCreativeTabs {
                     itemList.add(itemstack);
                 }
             }
+        }
+    });
+
+    public static final CreativeTabs MOD_OTHER = (new CreativeTabs("mod_other") {
+        @Override
+        public ItemStack getTabIconItem() {
+            return new ItemStack(ItemManager.TRIFORCESHARD[0]);
         }
     });
 
