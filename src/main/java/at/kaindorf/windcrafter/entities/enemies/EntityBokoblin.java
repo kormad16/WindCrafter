@@ -289,8 +289,12 @@ public class EntityBokoblin extends EntityMob {
 
     protected boolean canEquipItem(ItemStack stack)
     {
-        return true;
-        //return /*stack.getItem() == Items.EGG &&*/ this.isRiding() ? false : super.canEquipItem(stack);
+        if (
+                stack.getItem() == ItemManager.BOKOSTICK
+        )
+            return true;
+        else
+            return false;
     }
 
     /**
