@@ -3,6 +3,7 @@ package at.kaindorf.windcrafter.entities.enemies;
 import at.kaindorf.windcrafter.entities.ai.EntityAIAttackBokoblin;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.init.SoundManager;
+import at.kaindorf.windcrafter.util.WindcrafterLootTable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -22,7 +23,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import javax.annotation.Nullable;
 
 public class EntityBokoblin extends EntityMob {
@@ -221,7 +221,7 @@ public class EntityBokoblin extends EntityMob {
     @Nullable
     protected ResourceLocation getLootTable()
     {
-        return LootTableList.EMPTY;
+        return WindcrafterLootTable.ENTITIES_BOKOBLIN;
     }
 
     /**

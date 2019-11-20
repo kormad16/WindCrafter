@@ -4,6 +4,7 @@ import at.kaindorf.windcrafter.WindcrafterMod;
 import at.kaindorf.windcrafter.init.EntityManager;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.items.*;
+import at.kaindorf.windcrafter.util.BiomeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
@@ -18,10 +19,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 
+import java.util.Arrays;
+import java.util.logging.LogManager;
+
 @Mod.EventBusSubscriber(modid = WindcrafterMod.MODID)
 public class CommonProxy {
-
-
 
     public void preinit(FMLPreInitializationEvent e) {
 

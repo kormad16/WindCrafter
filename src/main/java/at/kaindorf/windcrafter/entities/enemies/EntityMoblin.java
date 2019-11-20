@@ -1,30 +1,25 @@
 package at.kaindorf.windcrafter.entities.enemies;
 
-import at.kaindorf.windcrafter.entities.ai.EntityAIAttackBokoblin;
 import at.kaindorf.windcrafter.entities.ai.EntityAIAttackMoblin;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.init.SoundManager;
+import at.kaindorf.windcrafter.util.WindcrafterLootTable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nullable;
 
@@ -206,7 +201,7 @@ public class EntityMoblin extends EntityMob {
     @Nullable
     protected ResourceLocation getLootTable()
     {
-        return LootTableList.EMPTY;
+        return WindcrafterLootTable.ENTITIES_MOBLIN;
     }
 
     /**
@@ -249,8 +244,10 @@ public class EntityMoblin extends EntityMob {
 
     protected boolean canEquipItem(ItemStack stack)
     {
-        return true;
-        //return /*stack.getItem() == Items.EGG &&*/ this.isRiding() ? false : super.canEquipItem(stack);
+        if (stack.getItem() == ItemManager.MOBLIN_SPEAR)
+            return true;
+        else
+            return false;
     }
 
     /**
