@@ -27,6 +27,7 @@ public class ItemManager {
     public static Item BOKOSTICK = new ItemEnemyWeapon(0);
     public static Item DARKNUT_SWORD = new ItemEnemyWeapon(1);
     public static Item MOBLIN_SPEAR = new ItemEnemyWeapon(2);
+    public static Item MACHETE = new ItemEnemyWeapon(3);
 
     // Enemy Drops
     public static Item JOY_PENDANT = new ItemMobDrop(0);
@@ -47,7 +48,7 @@ public class ItemManager {
                 HEART, HEARTCONTAINER, HEARTPIECE,
                 SMALLMAGIC, LARGEMAGIC,
                 FIREARROW, ICEARROW, LIGHTARROW,
-                BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR,
+                BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE,
                 JOY_PENDANT, SKULL_NECKLACE
         );
         e.getRegistry().registerAll(MASTERSWORD);
@@ -70,6 +71,7 @@ public class ItemManager {
         registerRender(BOKOSTICK);
         registerRender(DARKNUT_SWORD);
         registerRender(MOBLIN_SPEAR);
+        registerRender(MACHETE);
 
         registerRender(SMALLMAGIC);
         registerRender(LARGEMAGIC);
