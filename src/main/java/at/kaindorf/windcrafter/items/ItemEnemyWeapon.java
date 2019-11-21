@@ -10,10 +10,10 @@ import net.minecraft.item.ItemSword;
 
 public class ItemEnemyWeapon extends ItemSword {
 
-    public static final String[] ids = {"bokostick", "darknut_sword", "moblin_spear"};
-    private static final float[] attackDamage = {2.0f, 6.5f, 3.0f};
-    private static final float[] attackSpeed = {-1.5f, -3.5f, -1.75f};
-    private static final int[] durability = {50, 200, 100};
+    public static final String[] ids = {"bokostick", "darknut_sword", "moblin_spear", "machete"};
+    private static final float[] attackDamage = {2.0f, 6.5f, 3.0f, 4.0f};
+    private static final float[] attackSpeed = {-1.5f, -3.5f, -1.75f, -2.5f};
+    private static final int[] durability = {50, 200, 100, 150};
 
     private int index;
 
