@@ -32,6 +32,9 @@ public class ItemManager {
     // Enemy Drops
     public static Item JOY_PENDANT = new ItemMobDrop(0);
     public static Item SKULL_NECKLACE = new ItemMobDrop(1);
+    public static Item RED_CHUJELLY = new ItemMobDrop(2);
+    public static Item GREEN_CHUJELLY = new ItemMobDrop(3);
+    public static Item BLUE_CHUJELLY = new ItemMobDrop(4);
 
     // Magic System
     public static Item SMALLMAGIC = new ItemMagicJar(false);
@@ -49,7 +52,7 @@ public class ItemManager {
                 SMALLMAGIC, LARGEMAGIC,
                 FIREARROW, ICEARROW, LIGHTARROW,
                 BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE,
-                JOY_PENDANT, SKULL_NECKLACE
+                JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY
         );
         e.getRegistry().registerAll(MASTERSWORD);
         e.getRegistry().registerAll(TRIFORCESHARD);
@@ -82,6 +85,9 @@ public class ItemManager {
 
         registerRender(JOY_PENDANT);
         registerRender(SKULL_NECKLACE);
+        registerRender(RED_CHUJELLY);
+        registerRender(GREEN_CHUJELLY);
+        registerRender(BLUE_CHUJELLY);
     }
 
     private static void registerRender(Item item) {
