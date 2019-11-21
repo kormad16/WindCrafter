@@ -235,25 +235,11 @@ public class EntityBokoblin extends EntityMob {
                 this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemManager.BOKOSTICK));
                 break;
             case 1:
-                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemManager.HEROS_SWORD));
+                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemManager.MACHETE));
                 this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
                 break;
             case 2:
         }
-//        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-//        if (this.rand.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F))
-//        {
-//            int i = this.rand.nextInt(3);
-//
-//            if (i == 0)
-//            {
-//                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-//            }
-//            else
-//            {
-//                this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
-//            }
-//        }
     }
 
     /**
