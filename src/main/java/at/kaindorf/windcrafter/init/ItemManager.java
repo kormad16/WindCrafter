@@ -3,10 +3,8 @@ package at.kaindorf.windcrafter.init;
 import at.kaindorf.windcrafter.items.*;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.datafix.fixes.PotionItems;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.RegistryEvent;
 
 public class ItemManager {
@@ -51,6 +49,7 @@ public class ItemManager {
     public static Item RED_POTION = new ItemHealPotion(0);
     public static Item GREEN_POTION = new ItemHealPotion(1);
     public static Item BLUE_POTION = new ItemHealPotion(2);
+    public static Item FAIRY_BOTTLE = new ItemFairyBottle();
 
     public static void registerItems(RegistryEvent.Register<Item> e) {
         e.getRegistry().registerAll(
@@ -60,7 +59,7 @@ public class ItemManager {
                 FIREARROW, ICEARROW, LIGHTARROW,
                 BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE,
                 JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY,
-                RED_POTION, GREEN_POTION, BLUE_POTION
+                RED_POTION, GREEN_POTION, BLUE_POTION, FAIRY_BOTTLE
         );
         e.getRegistry().registerAll(MASTERSWORD);
         e.getRegistry().registerAll(TRIFORCESHARD);
@@ -100,6 +99,7 @@ public class ItemManager {
         registerRender(RED_POTION);
         registerRender(GREEN_POTION);
         registerRender(BLUE_POTION);
+        registerRender(FAIRY_BOTTLE);
     }
 
     private static void registerRender(Item item) {

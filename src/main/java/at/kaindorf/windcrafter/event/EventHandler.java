@@ -10,9 +10,12 @@ import at.kaindorf.windcrafter.items.ItemMagicJar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -43,6 +46,21 @@ public class EventHandler {
         } else if(e.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
             e.setCanceled(true);
             MAGIC_GUI.drawMagic(e.getResolution().getScaledWidth(), e.getResolution().getScaledHeight());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerHurt(LivingAttackEvent e) {
+        if(e.getEntity() instanceof EntityPlayer) {
+            EntityPlayer p = (EntityPlayer)e.getEntity();
+            if(p.getHealth() - e.getAmount() <= 0 && p.inventory.hasItemStack(new ItemStack(ItemManager.FAIRY_BOTTLE))) {
+                p.setHealth(0.5f);
+                p.inventory.clearMatchingItems(ItemManager.FAIRY_BOTTLE, 0, 1, null);
+                p.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
+                p.playSound(SoundManager.fairyHealSoundEvent, 1.0f, 1.0f);
+                p.heal((float)(p.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()/2 - 0.5));
+                e.setCanceled(true);
+            }
         }
     }
 
