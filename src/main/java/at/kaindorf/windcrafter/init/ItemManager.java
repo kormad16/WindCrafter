@@ -35,6 +35,9 @@ public class ItemManager {
     public static Item RED_CHUJELLY = new ItemMobDrop(2);
     public static Item GREEN_CHUJELLY = new ItemMobDrop(3);
     public static Item BLUE_CHUJELLY = new ItemMobDrop(4);
+    public static Item BOKO_SEED = new ItemMobDrop(5);
+    public static Item GOLDEN_FEATHER = new ItemMobDrop(6);
+    public static Item KNIGHTS_CREST = new ItemMobDrop(7);
 
     // Magic System
     public static Item SMALLMAGIC = new ItemMagicJar(false);
@@ -58,7 +61,7 @@ public class ItemManager {
                 SMALLMAGIC, LARGEMAGIC,
                 FIREARROW, ICEARROW, LIGHTARROW,
                 BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE,
-                JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY,
+                JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY, BOKO_SEED, GOLDEN_FEATHER, KNIGHTS_CREST,
                 RED_POTION, GREEN_POTION, BLUE_POTION, FAIRY_BOTTLE
         );
         e.getRegistry().registerAll(MASTERSWORD);
@@ -95,6 +98,9 @@ public class ItemManager {
         registerRender(RED_CHUJELLY);
         registerRender(GREEN_CHUJELLY);
         registerRender(BLUE_CHUJELLY);
+        registerRender(BOKO_SEED);
+        registerRender(GOLDEN_FEATHER);
+        registerRender(KNIGHTS_CREST);
 
         registerRender(RED_POTION);
         registerRender(GREEN_POTION);
