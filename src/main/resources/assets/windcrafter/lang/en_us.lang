@@ -31,10 +31,14 @@ item.skull_necklace.name=Skull Necklace
 item.red_chujelly.name=Red Chu Jelly
 item.green_chujelly.name=Green Chu Jelly
 item.blue_chujelly.name=Blue Chu Jelly
+item.bokoseed.name=Boko Baba Seed
+item.golden_feather.name=Golden Feather
+item.knights_crest.name=Knight's Crest
 
 item.redpotion.name=Red Potion
 item.greenpotion.name=Green Potion
 item.bluepotion.name=Blue Potion
+item.fairybottle.name=Fairy Bottle
 
 item.smallmagic.name=Small Magic Jar
 item.largemagic.name=Large Magic Jar

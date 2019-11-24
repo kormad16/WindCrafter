@@ -3,10 +3,8 @@ package at.kaindorf.windcrafter.init;
 import at.kaindorf.windcrafter.items.*;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.datafix.fixes.PotionItems;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.RegistryEvent;
 
 public class ItemManager {
@@ -37,6 +35,9 @@ public class ItemManager {
     public static Item RED_CHUJELLY = new ItemMobDrop(2);
     public static Item GREEN_CHUJELLY = new ItemMobDrop(3);
     public static Item BLUE_CHUJELLY = new ItemMobDrop(4);
+    public static Item BOKO_SEED = new ItemMobDrop(5);
+    public static Item GOLDEN_FEATHER = new ItemMobDrop(6);
+    public static Item KNIGHTS_CREST = new ItemMobDrop(7);
 
     // Magic System
     public static Item SMALLMAGIC = new ItemMagicJar(false);
@@ -51,6 +52,7 @@ public class ItemManager {
     public static Item RED_POTION = new ItemHealPotion(0);
     public static Item GREEN_POTION = new ItemHealPotion(1);
     public static Item BLUE_POTION = new ItemHealPotion(2);
+    public static Item FAIRY_BOTTLE = new ItemFairyBottle();
 
     public static void registerItems(RegistryEvent.Register<Item> e) {
         e.getRegistry().registerAll(
@@ -59,8 +61,8 @@ public class ItemManager {
                 SMALLMAGIC, LARGEMAGIC,
                 FIREARROW, ICEARROW, LIGHTARROW,
                 BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE,
-                JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY,
-                RED_POTION, GREEN_POTION, BLUE_POTION
+                JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY, BOKO_SEED, GOLDEN_FEATHER, KNIGHTS_CREST,
+                RED_POTION, GREEN_POTION, BLUE_POTION, FAIRY_BOTTLE
         );
         e.getRegistry().registerAll(MASTERSWORD);
         e.getRegistry().registerAll(TRIFORCESHARD);
@@ -96,10 +98,14 @@ public class ItemManager {
         registerRender(RED_CHUJELLY);
         registerRender(GREEN_CHUJELLY);
         registerRender(BLUE_CHUJELLY);
+        registerRender(BOKO_SEED);
+        registerRender(GOLDEN_FEATHER);
+        registerRender(KNIGHTS_CREST);
 
         registerRender(RED_POTION);
         registerRender(GREEN_POTION);
         registerRender(BLUE_POTION);
+        registerRender(FAIRY_BOTTLE);
     }
 
     private static void registerRender(Item item) {

@@ -10,13 +10,20 @@ import at.kaindorf.windcrafter.items.ItemMagicJar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = WindcrafterMod.MODID)
 public class EventHandler {
@@ -34,6 +41,8 @@ public class EventHandler {
     public static final GuiZeldaHealth HEALTH_GUI = new GuiZeldaHealth(Minecraft.getMinecraft());
     public static final GuiZeldaMagic MAGIC_GUI = new GuiZeldaMagic(Minecraft.getMinecraft());
 
+    public static final float FAIRY_PARTICLE_MAX = 80;
+
     // Zelda Health System: Modified Health Display
     @SubscribeEvent
     public static void onRenderOverlay(RenderGameOverlayEvent.Pre e) {
@@ -46,9 +55,44 @@ public class EventHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerHurt(LivingAttackEvent e) {
+        if(e.getEntity() instanceof EntityPlayer) {
+            EntityPlayer p = (EntityPlayer)e.getEntity();
+            if(p.getHealth() - e.getAmount() <= 0 && p.inventory.hasItemStack(new ItemStack(ItemManager.FAIRY_BOTTLE))) {
+                p.inventory.clearMatchingItems(ItemManager.FAIRY_BOTTLE, 0, 1, null);
+                p.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
+                p.playSound(SoundManager.fairyHealSoundEvent, 1.0f, 1.0f);
+                p.setHealth((float)(p.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()/2));
+                p.performHurtAnimation();
+                p.getEntityData().setInteger("FairyParticleTimer",  (int)FAIRY_PARTICLE_MAX);
+                e.setCanceled(true);
+            }
+        }
+    }
+
+    private static void spawnFairyParticles(int particleCount, EntityPlayer p, int timer)
+    {
+        if (particleCount > 0)
+        {
+            World world = Minecraft.getMinecraft().world;
+            Random rand = new Random();
+            for (int j = 0; j < particleCount; ++j)
+            {
+                world.spawnParticle(EnumParticleTypes.CRIT, p.posX + Math.sin(0.25*(timer+(1.0/particleCount)*j)) * p.width, p.posY + p.height - p.height*(timer/FAIRY_PARTICLE_MAX), p.posZ + Math.cos(0.25*(timer+(1.0/particleCount)*j)) * (double)p.width, 0,-0.0125,0);
+            }
+        }
+    }
+
     // Player Tick Event
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
+        // Fairy Particles
+        if(e.player.getEntityData().hasKey("FairyParticleTimer") && e.player.getEntityData().getInteger("FairyParticleTimer") > 0) {
+            int fairytimer = e.player.getEntityData().getInteger("FairyParticleTimer");
+            spawnFairyParticles(5, e.player, fairytimer);
+            e.player.getEntityData().setInteger("FairyParticleTimer", fairytimer-1);
+        }
         // Heart
         while (e.player.inventory.hasItemStack(new ItemStack(ItemManager.HEART))) {
             e.player.playSound(SoundManager.heartSoundEvent, 1.0f, 1.0f);

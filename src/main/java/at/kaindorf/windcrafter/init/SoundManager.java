@@ -12,6 +12,7 @@ public class SoundManager {
     public static final SoundEvent lowHealthSoundEvent = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "low_health"));
     public static final SoundEvent smallPickupSoundEvent = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "small_pickup"));
     public static final SoundEvent errorSoundEvent = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "zelda_error"));
+    public static final SoundEvent fairyHealSoundEvent = new SoundEvent(new ResourceLocation(WindcrafterMod.MODID, "fairyheal"));
 
     // Entities
     // Mobs
