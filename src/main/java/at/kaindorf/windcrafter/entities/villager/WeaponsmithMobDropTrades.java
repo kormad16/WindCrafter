@@ -15,6 +15,6 @@ public class WeaponsmithMobDropTrades implements EntityVillager.ITradeList {
     @Override
     public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
         recipeList.add(new MerchantRecipe(new ItemStack(ItemManager.JOY_PENDANT, 1), new ItemStack(Items.EMERALD, 1)));
-        recipeList.add(new MerchantRecipe(new ItemStack(ItemManager.KNIGHTS_CREST, 1), new ItemStack(Items.EMERALD, 3)));
+        recipeList.add(new MerchantRecipe(new ItemStack(ItemManager.KNIGHTS_CREST, 1), new ItemStack(Items.EMERALD, 7)));
     }
 }
