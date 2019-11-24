@@ -5,13 +5,17 @@ import at.kaindorf.windcrafter.gui.GuiZeldaHealth;
 import at.kaindorf.windcrafter.gui.GuiZeldaMagic;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.init.SoundManager;
+import at.kaindorf.windcrafter.items.ItemHerosCharm;
 import at.kaindorf.windcrafter.items.ItemHerosSword;
 import at.kaindorf.windcrafter.items.ItemMagicJar;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -23,7 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.Random;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = WindcrafterMod.MODID)
 public class EventHandler {
@@ -42,6 +46,9 @@ public class EventHandler {
     public static final GuiZeldaMagic MAGIC_GUI = new GuiZeldaMagic(Minecraft.getMinecraft());
 
     public static final float FAIRY_PARTICLE_MAX = 80;
+    public static final int HEROS_CHARM_BAR_LENGTH = 20;
+
+    private static Map<UUID, String> tagNameMap = new HashMap<>();
 
     // Zelda Health System: Modified Health Display
     @SubscribeEvent
@@ -84,9 +91,47 @@ public class EventHandler {
         }
     }
 
+    private static String getHealthString(float health, float maxHealth) {
+        int greenCount = (int)Math.ceil((health/maxHealth) * HEROS_CHARM_BAR_LENGTH);
+        int redCount = HEROS_CHARM_BAR_LENGTH - greenCount;
+
+        String healthStr = "\u00A72";
+        for(int i = 0; i < greenCount; i++)
+            healthStr += "|";
+        healthStr += "\u00A7r\u00A74";
+        for(int i = 0; i < redCount; i++)
+            healthStr += "|";
+        return healthStr + "\u00A7r";
+    }
+
     // Player Tick Event
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
+        // Hero's Charm
+        try {
+            if (!e.player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() && e.player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemHerosCharm) {
+                List<Entity> entities = Minecraft.getMinecraft().world.loadedEntityList;
+                for (Entity entity : entities) {
+                    if (!(entity instanceof EntityPlayer) && entity instanceof EntityLiving) {
+                        if (!tagNameMap.containsKey(entity.getUniqueID()))
+                            tagNameMap.put(entity.getUniqueID(), entity.getCustomNameTag());
+                        if(!entity.getAlwaysRenderNameTag())
+                            entity.setAlwaysRenderNameTag(true);
+                        entity.setCustomNameTag((tagNameMap.get(entity.getCustomNameTag()) != null ? " " + tagNameMap.get(entity.getCustomNameTag()) : "") + getHealthString(((EntityLiving) entity).getHealth(), (float) ((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()));
+                    }
+                }
+            } else {
+                List<Entity> entities = Minecraft.getMinecraft().world.loadedEntityList;
+                for (Entity entity : entities) {
+                    if (tagNameMap.containsKey(entity.getUniqueID())) {
+                            entity.setCustomNameTag(tagNameMap.get(entity.getCustomNameTag()) != null ? tagNameMap.get(entity.getCustomNameTag()) : "");
+                        tagNameMap.remove(entity.getUniqueID());
+                        if(entity.getAlwaysRenderNameTag())
+                            entity.setAlwaysRenderNameTag(false);
+                    }
+                }
+            }
+        } catch(Exception ex) {}
         // Fairy Particles
         if(e.player.getEntityData().hasKey("FairyParticleTimer") && e.player.getEntityData().getInteger("FairyParticleTimer") > 0) {
             int fairytimer = e.player.getEntityData().getInteger("FairyParticleTimer");

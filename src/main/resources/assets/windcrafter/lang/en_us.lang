@@ -47,5 +47,7 @@ item.icearrow.name=Ice Arrow
 item.firearrow.name=Fire Arrow
 item.lightarrow.name=Light Arrow
 
+item.heros_charm.name=Hero's Charm
+
 entity.bokoblin.name=Bokoblin
 entity.moblin.name=Moblin
