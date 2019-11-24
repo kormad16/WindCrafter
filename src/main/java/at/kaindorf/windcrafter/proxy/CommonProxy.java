@@ -3,6 +3,7 @@ package at.kaindorf.windcrafter.proxy;
 import at.kaindorf.windcrafter.WindcrafterMod;
 import at.kaindorf.windcrafter.init.EntityManager;
 import at.kaindorf.windcrafter.init.ItemManager;
+import at.kaindorf.windcrafter.init.TradeManager;
 import at.kaindorf.windcrafter.items.*;
 import at.kaindorf.windcrafter.util.BiomeHelper;
 import net.minecraft.block.Block;
@@ -33,7 +34,7 @@ public class CommonProxy {
     }
 
     public void postinit(FMLPostInitializationEvent e) {
-
+        TradeManager.initVillagerTrades();
     }
 
     @SubscribeEvent
