@@ -115,8 +115,6 @@ public class EventHandler {
                     if (!(entity instanceof EntityPlayer) && entity instanceof EntityLiving) {
                         if (!tagNameMap.containsKey(entity.getUniqueID()))
                             tagNameMap.put(entity.getUniqueID(), entity.getCustomNameTag());
-                        if(!entity.getAlwaysRenderNameTag())
-                            entity.setAlwaysRenderNameTag(true);
                         entity.setCustomNameTag((tagNameMap.get(entity.getCustomNameTag()) != null ? " " + tagNameMap.get(entity.getCustomNameTag()) : "") + getHealthString(((EntityLiving) entity).getHealth(), (float) ((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()));
                     }
                 }
@@ -126,8 +124,6 @@ public class EventHandler {
                     if (tagNameMap.containsKey(entity.getUniqueID())) {
                             entity.setCustomNameTag(tagNameMap.get(entity.getCustomNameTag()) != null ? tagNameMap.get(entity.getCustomNameTag()) : "");
                         tagNameMap.remove(entity.getUniqueID());
-                        if(entity.getAlwaysRenderNameTag())
-                            entity.setAlwaysRenderNameTag(false);
                     }
                 }
             }

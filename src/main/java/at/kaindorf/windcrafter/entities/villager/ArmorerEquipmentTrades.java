@@ -14,6 +14,6 @@ public class ArmorerEquipmentTrades implements EntityVillager.ITradeList {
 
     @Override
     public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random) {
-        recipeList.add(new MerchantRecipe(new ItemStack(ItemManager.JOY_PENDANT, 20), new ItemStack(ItemManager.HEROS_CHARM, 1)));
+        recipeList.add(new MerchantRecipe(new ItemStack(ItemManager.JOY_PENDANT, 40), new ItemStack(ItemManager.HEROS_CHARM, 1)));
     }
 }
