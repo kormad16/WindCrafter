@@ -34,5 +34,23 @@
   },
   "entity.windcrafter.moblin.death": {
     "sounds": [ "windcrafter:moblin/death" ]
+  },
+  "entity.windcrafter.chuchu.ambient": {
+    "sounds": [ "windcrafter:chuchu/ambient" ]
+  },
+  "entity.windcrafter.chuchu.hurt": {
+    "sounds": [ "windcrafter:chuchu/hurt" ]
+  },
+  "entity.windcrafter.chuchu.death": {
+    "sounds": [ "windcrafter:chuchu/death" ]
+  },
+  "entity.windcrafter.chuchu.squish": {
+    "sounds": [ "windcrafter:chuchu/squish" ]
+  },
+  "entity.windcrafter.chuchu.jump": {
+    "sounds": [ "windcrafter:chuchu/jump" ]
+  },
+  "entity.windcrafter.chuchu.fall": {
+    "sounds": [ "windcrafter:chuchu/fall" ]
   }
 }

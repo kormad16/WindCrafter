@@ -3,7 +3,7 @@ package at.kaindorf.windcrafter.entities.enemies;
 import at.kaindorf.windcrafter.entities.ai.EntityAIAttackBokoblin;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.init.SoundManager;
-import at.kaindorf.windcrafter.util.WindcrafterLootTable;
+import at.kaindorf.windcrafter.entities.WindcrafterLootTable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -26,10 +26,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class EntityBokoblin extends EntityMob {
-    /** The attribute which determines the chance that this mob will spawn reinforcements */
-    //protected static final IAttribute SPAWN_REINFORCEMENTS_CHANCE = (new RangedAttribute((IAttribute)null, "bokoblin.spawnReinforcements", 0.0D, 0.0D, 1.0D)).setDescription("Spawn Reinforcements Chance");
 
-    //private static final DataParameter<Boolean> ARMS_RAISED = EntityDataManager.<Boolean>createKey(EntityZombie.class, DataSerializers.BOOLEAN);
     private float bokoblinWidth = -1.0F;
     private float bokoblinHeight;
 
@@ -62,7 +59,6 @@ public class EntityBokoblin extends EntityMob {
 
     protected void applyEntityAI()
     {
-        //this.tasks.addTask(6, new EntityAIMoveThroughVillage(this, 1.0D, false));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] {EntityBokoblin.class, EntityMoblin.class}));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
     }
@@ -73,16 +69,13 @@ public class EntityBokoblin extends EntityMob {
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(14.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(35.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.36D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
-//        this.getAttributeMap().registerAttribute(SPAWN_REINFORCEMENTS_CHANCE).setBaseValue(this.rand.nextDouble() * net.minecraftforge.common.ForgeModContainer.zombieSummonBaseChance);
     }
 
     protected void entityInit()
     {
         super.entityInit();
         this.getDataManager().register(PROFESSION, Byte.valueOf((byte)0));
-        //this.getDataManager().register(ARMS_RAISED, Boolean.valueOf(false));
     }
 
     public byte getProfession()
@@ -94,17 +87,6 @@ public class EntityBokoblin extends EntityMob {
     {
         this.dataManager.set(PROFESSION, Byte.valueOf((byte)profession));
     }
-
-//    public void setArmsRaised(boolean armsRaised)
-//    {
-//        this.getDataManager().set(ARMS_RAISED, Boolean.valueOf(armsRaised));
-//    }
-
-//    @SideOnly(Side.CLIENT)
-//    public boolean isArmsRaised()
-//    {
-//        return ((Boolean)this.getDataManager().get(ARMS_RAISED)).booleanValue();
-//    }
 
     /**
      * Get the experience points the entity currently has.
@@ -125,38 +107,6 @@ public class EntityBokoblin extends EntityMob {
      */
     public void onLivingUpdate()
     {
-//        if (this.world.isDaytime() && !this.world.isRemote && !this.isChild() && this.shouldBurnInDay())
-//        {
-//            float f = this.getBrightness();
-//
-//            if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.canSeeSky(new BlockPos(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ)))
-//            {
-//                boolean flag = true;
-//                ItemStack itemstack = this.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-//
-//                if (!itemstack.isEmpty())
-//                {
-//                    if (itemstack.isItemStackDamageable())
-//                    {
-//                        itemstack.setItemDamage(itemstack.getItemDamage() + this.rand.nextInt(2));
-//
-//                        if (itemstack.getItemDamage() >= itemstack.getMaxDamage())
-//                        {
-//                            this.renderBrokenItemStack(itemstack);
-//                            this.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
-//                        }
-//                    }
-//
-//                    flag = false;
-//                }
-//
-//                if (flag)
-//                {
-//                    this.setFire(8);
-//                }
-//            }
-//        }
-
         super.onLivingUpdate();
     }
 
@@ -165,8 +115,10 @@ public class EntityBokoblin extends EntityMob {
      */
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
-        if (this.isBurning() && this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem().equals(Items.SHIELD))
+        if (this.isBurning() && this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem().equals(Items.SHIELD)) {
             this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.AIR));
+            this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
+        }
         return super.attackEntityFrom(source, amount);
     }
 
@@ -233,12 +185,16 @@ public class EntityBokoblin extends EntityMob {
         switch (getProfession() % 3) {
             case 0:
                 this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemManager.BOKOSTICK));
+                this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(-0.5D);
                 break;
             case 1:
                 this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemManager.MACHETE));
+                this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(-1.5D);
                 this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
+                this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(2.0D);
                 break;
             case 2:
+                this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
         }
     }
 
@@ -296,13 +252,6 @@ public class EntityBokoblin extends EntityMob {
 
         this.setProfession((byte)this.rand.nextInt(3));
         this.setEquipmentBasedOnDifficulty(difficulty);
-//        this.setEnchantmentBasedOnDifficulty(difficulty);
-
-//        if (this.rand.nextFloat() < f * 0.05F)
-//        {
-//            this.getEntityAttribute(SPAWN_REINFORCEMENTS_CHANCE).applyModifier(new AttributeModifier("Leader bokoblin bonus", this.rand.nextDouble() * 0.25D + 0.5D, 0));
-//            this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(new AttributeModifier("Leader bokoblin bonus", this.rand.nextDouble() * 3.0D + 1.0D, 2));
-//        }
 
         return livingdata;
     }
@@ -341,25 +290,15 @@ public class EntityBokoblin extends EntityMob {
     /**
      * Called when the mob's health reaches 0.
      */
-    public void onDeath(DamageSource cause) // TODO: add drop
+    public void onDeath(DamageSource cause)
     {
         super.onDeath(cause);
-
-//        if (cause.getTrueSource() instanceof EntityCreeper)
-//        {
-//            EntityCreeper entitycreeper = (EntityCreeper)cause.getTrueSource();
-//
-//            if (entitycreeper.getPowered() && entitycreeper.ableToCauseSkullDrop())
-//            {
-//                entitycreeper.incrementDroppedSkulls();
-//                ItemStack itemstack = this.getSkullDrop();
-//
-//                if (!itemstack.isEmpty())
-//                {
-//                    this.entityDropItem(itemstack, 0.0F);
-//                }
-//            }
-//        }
+        if (cause.getTrueSource() instanceof EntityPlayer) {
+            EntityPlayer p = (EntityPlayer)cause.getTrueSource();
+            if (p.getHealth() != p.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue()) {
+                if (this.world.rand.nextDouble() < 0.75) this.entityDropItem(new ItemStack(ItemManager.HEART), 0.0f);
+            }
+        }
     }
 
 }

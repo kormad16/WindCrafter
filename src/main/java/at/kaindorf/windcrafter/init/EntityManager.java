@@ -2,6 +2,7 @@ package at.kaindorf.windcrafter.init;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
 import at.kaindorf.windcrafter.entities.enemies.EntityBokoblin;
+import at.kaindorf.windcrafter.entities.enemies.EntityChuChu;
 import at.kaindorf.windcrafter.entities.enemies.EntityMoblin;
 import at.kaindorf.windcrafter.entities.projectiles.EntityFireArrow;
 import at.kaindorf.windcrafter.entities.projectiles.EntityIceArrow;
@@ -36,6 +37,9 @@ public class EntityManager {
         ).build());
         event.getRegistry().register(getEntityWithSpawnEgg(
                 EntityMoblin.class, "moblin", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 100, 2, 4, getBiomesFromStrings(EntityMoblin.BIOMES)
+        ).build());
+        event.getRegistry().register(getEntityWithSpawnEgg(
+                EntityChuChu.class, "chuchu", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 100, 2, 4, getBiomesFromStrings(EntityChuChu.BIOMES)
         ).build());
 
         // Projectiles
@@ -78,6 +82,7 @@ public class EntityManager {
         // Mobs
         RenderingRegistry.registerEntityRenderingHandler(EntityBokoblin.class, RendererBokoblin::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityMoblin.class, RendererMoblin::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityChuChu.class, RendererChuChu::new);
 
         // Projectiles
         RenderingRegistry.registerEntityRenderingHandler(EntityFireArrow.class, RendererFireArrow::new);
