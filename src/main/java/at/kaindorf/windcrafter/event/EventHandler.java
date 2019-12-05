@@ -5,8 +5,6 @@ import at.kaindorf.windcrafter.gui.GuiZeldaHealth;
 import at.kaindorf.windcrafter.gui.GuiZeldaMagic;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.init.SoundManager;
-import at.kaindorf.windcrafter.items.ItemHerosSword;
-import at.kaindorf.windcrafter.items.ItemMagicJar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
