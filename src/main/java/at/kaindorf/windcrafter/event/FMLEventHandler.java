@@ -21,6 +21,9 @@ public class FMLEventHandler {
             e.player.getEntityData().setInteger("ZeldaMagic", 100);
             e.player.getEntityData().setInteger("ZeldaMagicMax", 100);
         }
+        if(!e.player.getEntityData().hasKey("DamageCoolDown")) {
+            e.player.getEntityData().setInteger("DamageCoolDown", 0);
+        }
     }
 
 }

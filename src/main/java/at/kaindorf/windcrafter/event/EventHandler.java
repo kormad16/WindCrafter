@@ -1,6 +1,7 @@
 package at.kaindorf.windcrafter.event;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
+import at.kaindorf.windcrafter.entities.enemies.EntityChuChu;
 import at.kaindorf.windcrafter.gui.GuiZeldaHealth;
 import at.kaindorf.windcrafter.gui.GuiZeldaMagic;
 import at.kaindorf.windcrafter.init.ItemManager;
@@ -11,11 +12,11 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -57,6 +58,7 @@ public class EventHandler {
     public static void onPlayerHurt(LivingAttackEvent e) {
         if(e.getEntity() instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer)e.getEntity();
+            if (p.getEntityData().getInteger("DamageCoolDown") > 0) e.setCanceled(true);
             if(p.getHealth() - e.getAmount() <= 0 && p.inventory.hasItemStack(new ItemStack(ItemManager.FAIRY_BOTTLE))) {
                 p.inventory.clearMatchingItems(ItemManager.FAIRY_BOTTLE, 0, 1, null);
                 p.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
@@ -155,6 +157,13 @@ public class EventHandler {
             } else
                 e.player.getEntityData().setByte("LowHealthTimer", (byte)(e.player.getEntityData().getByte("LowHealthTimer")-1));
         }
+        if (e.player.getEntityData().getInteger("DamageCoolDown") > 0)
+            e.player.getEntityData().setInteger("DamageCoolDown", e.player.getEntityData().getInteger("DamageCoolDown") - 1);
+    }
+
+    @SubscribeEvent
+    public static void onEntityFall(LivingFallEvent event) {
+        if (event.getEntityLiving() instanceof EntityChuChu) event.setCanceled(true);
     }
 
 }

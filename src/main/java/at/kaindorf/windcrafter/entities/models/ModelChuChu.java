@@ -17,26 +17,30 @@ public class ModelChuChu extends ModelBase {
 	private final ModelRenderer head;
 
 	public ModelChuChu() {
+		this(0);
+	}
+
+	public ModelChuChu(float scale) {
 		textureWidth = 64;
 		textureHeight = 64;
 
 		base1 = new ModelRenderer(this);
 		base1.setRotationPoint(0.0F, 24.0F, 0.0F);
-		base1.cubeList.add(new ModelBox(base1, 0, 0, -2.0F, -2.0F, -6.0F, 4, 2, 12, 0.0F, false));
+		base1.cubeList.add(new ModelBox(base1, 0, 0, -2.0F, -2.0F, -6.0F, 4, 2, 12, scale, false));
 
 		base2 = new ModelRenderer(this);
 		base2.setRotationPoint(0.0F, 24.0F, 0.0F);
-		base2.cubeList.add(new ModelBox(base2, 0, 14, -6.0F, -2.0F, -2.0F, 12, 2, 4, 0.0F, false));
+		base2.cubeList.add(new ModelBox(base2, 0, 14, -6.0F, -2.0F, -2.0F, 12, 2, 4, scale, false));
 
 		body = new ModelRenderer(this);
 		body.setRotationPoint(0.0F, 24.0F, 0.0F);
-		body.cubeList.add(new ModelBox(body, 0, 0, -1.0F, -6.0F, -1.0F, 2, 3, 2, 0.0F, false));
-		body.cubeList.add(new ModelBox(body, 24, 24, -2.0F, -3.0F, -2.0F, 4, 3, 4, 0.0F, false));
-		body.cubeList.add(new ModelBox(body, 20, 0, -2.0F, -9.0F, -2.0F, 4, 3, 4, 0.0F, false));
+		body.cubeList.add(new ModelBox(body, 0, 0, -1.0F, -6.0F, -1.0F, 2, 3, 2, scale, false));
+		body.cubeList.add(new ModelBox(body, 24, 24, -2.0F, -3.0F, -2.0F, 4, 3, 4, scale, false));
+		body.cubeList.add(new ModelBox(body, 20, 0, -2.0F, -9.0F, -2.0F, 4, 3, 4, scale, false));
 
 		head = new ModelRenderer(this);
 		head.setRotationPoint(0.0F, 24.0F, 0.0F);
-		head.cubeList.add(new ModelBox(head, 0, 20, -3.0F, -15.0F, -3.0F, 6, 6, 6, 0.0F, false));
+		head.cubeList.add(new ModelBox(head, 0, 20, -3.0F, -15.0F, -3.0F, 6, 6, 6, scale, false));
 	}
 
 	@Override
