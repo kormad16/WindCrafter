@@ -17,6 +17,9 @@
   "zelda_error": {
     "sounds": [ "windcrafter:error" ]
   },
+  "fairyheal": {
+    "sounds": [ "windcrafter:fairyheal" ]
+  },
   "entity.windcrafter.bokoblin.ambient": {
     "sounds": [ "windcrafter:bokoblin/ambient" ]
   },

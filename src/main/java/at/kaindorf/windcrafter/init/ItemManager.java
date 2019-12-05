@@ -32,6 +32,12 @@ public class ItemManager {
     // Enemy Drops
     public static Item JOY_PENDANT = new ItemMobDrop(0);
     public static Item SKULL_NECKLACE = new ItemMobDrop(1);
+    public static Item RED_CHUJELLY = new ItemMobDrop(2);
+    public static Item GREEN_CHUJELLY = new ItemMobDrop(3);
+    public static Item BLUE_CHUJELLY = new ItemMobDrop(4);
+    public static Item BOKO_SEED = new ItemMobDrop(5);
+    public static Item GOLDEN_FEATHER = new ItemMobDrop(6);
+    public static Item KNIGHTS_CREST = new ItemMobDrop(7);
 
     // Magic System
     public static Item SMALLMAGIC = new ItemMagicJar(false);
@@ -42,6 +48,12 @@ public class ItemManager {
     public static Item ICEARROW = new ItemIceArrow();
     public static Item LIGHTARROW = new ItemLightArrow();
 
+    // Healing Consumables
+    public static Item RED_POTION = new ItemHealPotion(0);
+    public static Item GREEN_POTION = new ItemHealPotion(1);
+    public static Item BLUE_POTION = new ItemHealPotion(2);
+    public static Item FAIRY_BOTTLE = new ItemFairyBottle();
+
     public static void registerItems(RegistryEvent.Register<Item> e) {
         e.getRegistry().registerAll(
                 HEROS_SWORD,
@@ -49,7 +61,8 @@ public class ItemManager {
                 SMALLMAGIC, LARGEMAGIC,
                 FIREARROW, ICEARROW, LIGHTARROW,
                 BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE,
-                JOY_PENDANT, SKULL_NECKLACE
+                JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY, BOKO_SEED, GOLDEN_FEATHER, KNIGHTS_CREST,
+                RED_POTION, GREEN_POTION, BLUE_POTION, FAIRY_BOTTLE
         );
         e.getRegistry().registerAll(MASTERSWORD);
         e.getRegistry().registerAll(TRIFORCESHARD);
@@ -82,6 +95,17 @@ public class ItemManager {
 
         registerRender(JOY_PENDANT);
         registerRender(SKULL_NECKLACE);
+        registerRender(RED_CHUJELLY);
+        registerRender(GREEN_CHUJELLY);
+        registerRender(BLUE_CHUJELLY);
+        registerRender(BOKO_SEED);
+        registerRender(GOLDEN_FEATHER);
+        registerRender(KNIGHTS_CREST);
+
+        registerRender(RED_POTION);
+        registerRender(GREEN_POTION);
+        registerRender(BLUE_POTION);
+        registerRender(FAIRY_BOTTLE);
     }
 
     private static void registerRender(Item item) {
