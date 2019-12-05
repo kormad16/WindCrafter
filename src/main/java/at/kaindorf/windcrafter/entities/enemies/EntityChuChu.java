@@ -15,12 +15,14 @@ import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -44,6 +46,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
     public float squishFactor;
     public float prevSquishFactor;
     private boolean wasOnGround;
+    private boolean isCharged = true;
 
     public EntityChuChu(World worldIn) {
         super(worldIn);
@@ -86,6 +89,10 @@ public class EntityChuChu extends EntityLiving implements IMob {
         this.dataManager.set(PROFESSION, Byte.valueOf(profession));
     }
 
+    public boolean isCharged() {
+        return isCharged;
+    }
+
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
@@ -121,6 +128,9 @@ public class EntityChuChu extends EntityLiving implements IMob {
         } else if (!this.onGround && this.wasOnGround) {
             this.squishAmount = 1.0F;
         }
+//        else if (((ChuChuMoveHelper) this.getMoveHelper()).isCharging) {
+//            this.squishAmount = -0.5f;
+//        }
 
         this.wasOnGround = this.onGround;
         this.alterSquishAmount();
@@ -133,9 +143,9 @@ public class EntityChuChu extends EntityLiving implements IMob {
     /**
      * Gets the amount of time the chuChu needs to wait between jumps.
      */
-    protected int getJumpDelay() {
-        return this.rand.nextInt(200) + 100;
-    }
+//    protected int getJumpDelay() {
+//        return this.rand.nextInt(200) + 100;
+//    }
 
     public void notifyDataManagerChange(DataParameter<?> key) {
         super.notifyDataManagerChange(key);
@@ -145,7 +155,15 @@ public class EntityChuChu extends EntityLiving implements IMob {
      * Called by a player entity when they collide with an entity
      */
     public void onCollideWithPlayer(EntityPlayer entityIn) {
+        if (entityIn.getEntityData().getInteger("DamageCoolDown") > 0) return;
         this.dealDamage(entityIn);
+        if (this.isCharged()) {
+            entityIn.getEntityData().setInteger("DamageCoolDown", 100);
+            for(PotionEffect p : PotionTypes.SLOWNESS.getEffects())
+                entityIn.addPotionEffect(new PotionEffect(p.getPotion(), 85, 50));
+        } else {
+            entityIn.getEntityData().setInteger("DamageCoolDown", 5);
+        }
     }
 
     protected void dealDamage(EntityLivingBase entityIn) {

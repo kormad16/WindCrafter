@@ -2,6 +2,7 @@ package at.kaindorf.windcrafter.entities.renderers;
 
 import at.kaindorf.windcrafter.entities.enemies.EntityChuChu;
 import at.kaindorf.windcrafter.entities.models.ModelChuChu;
+import at.kaindorf.windcrafter.entities.renderers.layers.LayerChuChuCharge;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -11,11 +12,13 @@ public class RendererChuChu extends RenderLiving<EntityChuChu> {
 
     private static final ResourceLocation RED = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
     private static final ResourceLocation GREEN = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
+    private static final ResourceLocation YELLOW = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
     private static final ResourceLocation BLUE = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
     private static final ResourceLocation BLACK = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
 
     public RendererChuChu(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelChuChu(), ModelChuChu.SHADOW_SIZE);
+        this.addLayer(new LayerChuChuCharge(this));
     }
 
     @Override
@@ -33,8 +36,10 @@ public class RendererChuChu extends RenderLiving<EntityChuChu> {
             case 1:
                 return GREEN;
             case 2:
-                return BLUE;
+                return YELLOW;
             case 3:
+                return BLUE;
+            case 4:
                 return BLACK;
         }
         return RED;
