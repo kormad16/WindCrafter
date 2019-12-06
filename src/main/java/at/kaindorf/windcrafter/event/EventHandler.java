@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -164,6 +165,19 @@ public class EventHandler {
     @SubscribeEvent
     public static void onEntityFall(LivingFallEvent event) {
         if (event.getEntityLiving() instanceof EntityChuChu) event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public static void onEntityHurt(LivingHurtEvent event) {
+        // Cancel Player cause damage while stunned
+        if (event.getSource().getImmediateSource() instanceof EntityPlayer) {
+            EntityPlayer p = (EntityPlayer)event.getSource().getImmediateSource();
+            if (p.getEntityData().getInteger("DamageCoolDown") > 0) event.setCanceled(true);
+            if (event.getEntityLiving() instanceof EntityChuChu) {
+                EntityChuChu chuChu = (EntityChuChu)event.getEntityLiving();
+                if (chuChu.isCharged()) event.setCanceled(true);
+            }
+        }
     }
 
 }
