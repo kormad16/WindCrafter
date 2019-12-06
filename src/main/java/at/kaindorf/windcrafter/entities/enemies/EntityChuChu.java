@@ -46,7 +46,8 @@ public class EntityChuChu extends EntityLiving implements IMob {
     public float squishFactor;
     public float prevSquishFactor;
     private boolean wasOnGround;
-    private boolean isCharged = true;
+    private int chargedTime = 0;
+    private int noCharge = 0;
 
     public EntityChuChu(World worldIn) {
         super(worldIn);
@@ -71,7 +72,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(10.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
@@ -90,7 +91,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
     }
 
     public boolean isCharged() {
-        return isCharged;
+        return chargedTime > 0;
     }
 
     /**
@@ -157,17 +158,19 @@ public class EntityChuChu extends EntityLiving implements IMob {
     public void onCollideWithPlayer(EntityPlayer entityIn) {
         if (entityIn.getEntityData().getInteger("DamageCoolDown") > 0) return;
         this.dealDamage(entityIn);
-        if (this.isCharged()) {
-            entityIn.getEntityData().setInteger("DamageCoolDown", 100);
-            for(PotionEffect p : PotionTypes.SLOWNESS.getEffects())
-                entityIn.addPotionEffect(new PotionEffect(p.getPotion(), 85, 50));
-        } else {
-            entityIn.getEntityData().setInteger("DamageCoolDown", 5);
-        }
     }
 
     protected void dealDamage(EntityLivingBase entityIn) {
-        if (this.canEntityBeSeen(entityIn) && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttackStrength())) {
+        if (this.isEntityAlive() /*&& this.getDistance(entityIn) < width + 0.5f*/ && this.canEntityBeSeen(entityIn) && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttackStrength())) {
+            if (isCharged() && !((EntityPlayer)entityIn).isCreative()) {
+                entityIn.getEntityData().setInteger("DamageCoolDown", 75);
+                for(PotionEffect p : PotionTypes.SLOWNESS.getEffects())
+                    entityIn.addPotionEffect(new PotionEffect(p.getPotion(), 25, 255));
+//            for(PotionEffect p : PotionTypes.WEAKNESS.getEffects())
+//                entityIn.addPotionEffect(new PotionEffect(p.getPotion(), 25, 255));
+            } else {
+                entityIn.getEntityData().setInteger("DamageCoolDown", 5);
+            }
             this.applyEnchantments(this, entityIn);
         }
     }
@@ -238,6 +241,34 @@ public class EntityChuChu extends EntityLiving implements IMob {
 
     protected SoundEvent getJumpSound() {
         return SoundManager.chuChuJump;
+    }
+
+    @Override
+    public void onLivingUpdate() {
+        super.onLivingUpdate();
+        if (getProfession() == 2 || getProfession() == 3) {
+            if (chargedTime <= 0) {
+                if (noCharge <= 0) {
+                    if (this.getRNG().nextDouble() < 0.05f) {
+                        chargedTime = this.getRNG().nextInt(100) + 150;
+                        noCharge = this.getRNG().nextInt(50) + 75;
+                    }
+                } else {
+                    noCharge--;
+                }
+            } else {
+                chargedTime--;
+            }
+        }
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (isCharged() && source.getImmediateSource() != null) {
+            dealDamage((EntityLivingBase)source.getImmediateSource());
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
     }
 
     public void onDeath(DamageSource cause)
