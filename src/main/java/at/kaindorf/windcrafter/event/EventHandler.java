@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
@@ -158,24 +159,33 @@ public class EventHandler {
             } else
                 e.player.getEntityData().setByte("LowHealthTimer", (byte)(e.player.getEntityData().getByte("LowHealthTimer")-1));
         }
+
+        // Damage Cooldown
         if (e.player.getEntityData().getInteger("DamageCoolDown") > 0)
             e.player.getEntityData().setInteger("DamageCoolDown", e.player.getEntityData().getInteger("DamageCoolDown") - 1);
     }
 
     @SubscribeEvent
     public static void onEntityFall(LivingFallEvent event) {
-        if (event.getEntityLiving() instanceof EntityChuChu) event.setCanceled(true);
+        if (event.getEntityLiving() instanceof EntityChuChu && !((EntityChuChu)event.getEntityLiving()).isStone()) {
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
         // Cancel Player cause damage while stunned
-        if (event.getSource().getImmediateSource() instanceof EntityPlayer) {
-            EntityPlayer p = (EntityPlayer)event.getSource().getImmediateSource();
+        if (!event.getSource().isExplosion()
+                && event.getSource().getTrueSource() instanceof EntityPlayer
+                && !((EntityPlayer)event.getSource().getTrueSource()).isCreative()) {
+            EntityPlayer p = (EntityPlayer)event.getSource().getTrueSource();
             if (p.getEntityData().getInteger("DamageCoolDown") > 0) event.setCanceled(true);
-            if (event.getEntityLiving() instanceof EntityChuChu) {
+            else if (event.getEntityLiving() instanceof EntityChuChu) {
                 EntityChuChu chuChu = (EntityChuChu)event.getEntityLiving();
-                if (chuChu.isCharged()) event.setCanceled(true);
+                if (chuChu.isStone()
+                        || (!(event.getSource().getImmediateSource() instanceof EntityArrow) && (chuChu.isCharged() || chuChu.isDefense()))) {
+                    event.setCanceled(true);
+                }
             }
         }
     }

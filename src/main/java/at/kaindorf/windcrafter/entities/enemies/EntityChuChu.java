@@ -41,18 +41,24 @@ public class EntityChuChu extends EntityLiving implements IMob {
             "minecraft:mutated_extreme_hills", "minecraft:mutated_extreme_hills_with_trees", "minecraft:roofed_forest", "minecraft:mutated_roofed_forest"
     };
 
-    private static final DataParameter<Byte> PROFESSION = EntityDataManager.<Byte>createKey(EntityChuChu.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> PROFESSION = EntityDataManager.<Integer>createKey(EntityChuChu.class, DataSerializers.VARINT);
     public float squishAmount;
     public float squishFactor;
     public float prevSquishFactor;
     private boolean wasOnGround;
     private int chargedTime = 0;
     private int noCharge = 0;
+    private int defense = 0;
+    private int waitDefense = 0;
+    private int stoneTime = 0;
+    private boolean isDefense = false;
+    private boolean isCharged = false;
+    private boolean isStone = false;
 
     public EntityChuChu(World worldIn) {
         super(worldIn);
         this.height = 1F;
-        this.width = 0.65F;
+        this.width = 0.5F;
         this.moveHelper = new EntityChuChu.ChuChuMoveHelper(this);
     }
 
@@ -60,13 +66,12 @@ public class EntityChuChu extends EntityLiving implements IMob {
         this.tasks.addTask(1, new EntityChuChu.AIChuChuFloat(this));
         this.tasks.addTask(2, new EntityChuChu.AIChuChuAttack(this));
         this.tasks.addTask(3, new EntityChuChu.AIChuChuFaceRandom(this));
-        //this.tasks.addTask(5, new EntityChuChu.AIChuChuHop(this));
         this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
     }
 
     protected void entityInit() {
         super.entityInit();
-        this.getDataManager().register(PROFESSION, Byte.valueOf((byte) 0));
+        this.getDataManager().register(PROFESSION, Integer.valueOf(0));
     }
 
     @Override
@@ -83,15 +88,23 @@ public class EntityChuChu extends EntityLiving implements IMob {
      * Returns the profession of the chuChu.
      */
     public int getProfession() {
-        return (this.dataManager.get(PROFESSION)).intValue();
+        return this.dataManager.get(PROFESSION);
     }
 
-    public void setProfession(byte profession) {
-        this.dataManager.set(PROFESSION, Byte.valueOf(profession));
+    public void setProfession(int profession) {
+        this.dataManager.set(PROFESSION, Integer.valueOf(profession));
     }
 
     public boolean isCharged() {
-        return chargedTime > 0;
+        return this.isCharged;
+    }
+
+    public boolean isDefense() {
+        return this.isDefense;
+    }
+
+    public boolean isStone() {
+        return this.isStone;
     }
 
     /**
@@ -109,6 +122,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.wasOnGround = compound.getBoolean("wasOnGround");
+        this.setProfession(compound.getInteger("profession"));
     }
 
     /**
@@ -129,9 +143,11 @@ public class EntityChuChu extends EntityLiving implements IMob {
         } else if (!this.onGround && this.wasOnGround) {
             this.squishAmount = 1.0F;
         }
-//        else if (((ChuChuMoveHelper) this.getMoveHelper()).isCharging) {
-//            this.squishAmount = -0.5f;
-//        }
+        if (isDefense) {
+            this.squishAmount = -1.2f;
+        } else if (((ChuChuMoveHelper)this.getMoveHelper()).isCharging()) {
+            this.squishAmount = -0.5f;
+        }
 
         this.wasOnGround = this.onGround;
         this.alterSquishAmount();
@@ -147,7 +163,6 @@ public class EntityChuChu extends EntityLiving implements IMob {
 //    protected int getJumpDelay() {
 //        return this.rand.nextInt(200) + 100;
 //    }
-
     public void notifyDataManagerChange(DataParameter<?> key) {
         super.notifyDataManagerChange(key);
     }
@@ -156,20 +171,19 @@ public class EntityChuChu extends EntityLiving implements IMob {
      * Called by a player entity when they collide with an entity
      */
     public void onCollideWithPlayer(EntityPlayer entityIn) {
-        if (entityIn.getEntityData().getInteger("DamageCoolDown") > 0) return;
-        this.dealDamage(entityIn);
+        if (entityIn.getEntityData().getInteger("DamageCoolDown") <= 0 && getDistance(entityIn) < 1 && !isStone()) {
+            this.dealDamage(entityIn);
+        }
     }
 
     protected void dealDamage(EntityLivingBase entityIn) {
-        if (this.isEntityAlive() /*&& this.getDistance(entityIn) < width + 0.5f*/ && this.canEntityBeSeen(entityIn) && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttackStrength())) {
-            if (isCharged() && !((EntityPlayer)entityIn).isCreative()) {
+        if (this.isEntityAlive() && this.canEntityBeSeen(entityIn) && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttackStrength())) {
+            if (isCharged && !((EntityPlayer) entityIn).isCreative()) {
                 entityIn.getEntityData().setInteger("DamageCoolDown", 75);
-                for(PotionEffect p : PotionTypes.SLOWNESS.getEffects())
+                for (PotionEffect p : PotionTypes.SLOWNESS.getEffects())
                     entityIn.addPotionEffect(new PotionEffect(p.getPotion(), 25, 255));
-//            for(PotionEffect p : PotionTypes.WEAKNESS.getEffects())
-//                entityIn.addPotionEffect(new PotionEffect(p.getPotion(), 25, 255));
             } else {
-                entityIn.getEntityData().setInteger("DamageCoolDown", 5);
+                entityIn.getEntityData().setInteger("DamageCoolDown", 15);
             }
             this.applyEnchantments(this, entityIn);
         }
@@ -182,7 +196,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
     /**
      * Gets the amount of damage dealt to the player when "attacked" by the ChuChu.
      */
-    protected int getAttackStrength() {
+    protected double getAttackStrength() {
         return 1;
     }
 
@@ -210,11 +224,16 @@ public class EntityChuChu extends EntityLiving implements IMob {
     @Nullable
     protected ResourceLocation getLootTable() {
         switch (getProfession()) {
-            case 1: return WindcrafterLootTable.ENTITIES_CHUCHU_GREEN;
-            case 2: return WindcrafterLootTable.ENTITIES_CHUCHU_YELLOW;
-            case 3: return WindcrafterLootTable.ENTITIES_CHUCHU_BLUE;
-            case 4: return WindcrafterLootTable.ENTITIES_CHUCHU_BLACK;
-            default: return WindcrafterLootTable.ENTITIES_CHUCHU_RED;
+            case 1:
+                return WindcrafterLootTable.ENTITIES_CHUCHU_GREEN;
+            case 2:
+                return WindcrafterLootTable.ENTITIES_CHUCHU_YELLOW;
+            case 3:
+                return WindcrafterLootTable.ENTITIES_CHUCHU_BLUE;
+            case 4:
+                return WindcrafterLootTable.ENTITIES_CHUCHU_BLACK;
+            default:
+                return WindcrafterLootTable.ENTITIES_CHUCHU_RED;
         }
     }
 
@@ -234,7 +253,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         IEntityLivingData livingData = super.onInitialSpawn(difficulty, livingdata);
 
-        this.setProfession((byte) this.rand.nextInt(5));
+        this.setProfession(this.rand.nextInt(getBrightness() == 1 ? 4 : 5));
 
         return livingData;
     }
@@ -246,36 +265,107 @@ public class EntityChuChu extends EntityLiving implements IMob {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (getProfession() == 2 || getProfession() == 3) {
-            if (chargedTime <= 0) {
-                if (noCharge <= 0) {
-                    if (this.getRNG().nextDouble() < 0.05f) {
+        switch (this.getProfession()) {
+            case 2:
+            case 3:
+                if (chargedTime <= 0) {
+                    isCharged = false;
+                    if (noCharge <= 0) {
                         chargedTime = this.getRNG().nextInt(100) + 150;
+                        isCharged = true;
                         noCharge = this.getRNG().nextInt(50) + 75;
+                    } else {
+                        noCharge--;
                     }
                 } else {
-                    noCharge--;
+                    chargedTime--;
                 }
-            } else {
-                chargedTime--;
-            }
+                if (getProfession() == 2) break;
+            case 1:
+                if (defense <= 0) {
+                    isDefense = false;
+                    if (waitDefense <= 0) {
+                        defense = this.getRNG().nextInt(100) + 150;
+                        isDefense = true;
+                        waitDefense = this.getRNG().nextInt(50) + 75;
+                    } else {
+                        waitDefense--;
+                    }
+                } else {
+                    defense--;
+                }
+                break;
+            case 4:
+                if (stoneTime <= 0) {
+                    isStone = false;
+                    if (getBrightness() == 1) {
+                        isStone = true;
+                        stoneTime = getRNG().nextInt(50) + 125;
+                    }
+                } else if (getBrightness() != 1) {
+                    stoneTime--;
+                }
+                break;
         }
+//        if (getProfession() == 2 || getProfession() == 3) {
+//            if (chargedTime <= 0) {
+//                isCharged = false;
+//                if (noCharge <= 0) {
+//                    chargedTime = this.getRNG().nextInt(100) + 150;
+//                    isCharged = true;
+//                    noCharge = this.getRNG().nextInt(50) + 75;
+//                } else {
+//                    noCharge--;
+//                }
+//            } else {
+//                chargedTime--;
+//            }
+//        }
+//        if (getProfession() == 1 || getProfession() == 3) {
+//            if (defense <= 0) {
+//                isDefense = false;
+//                if (waitDefense <= 0) {
+//                    defense = this.getRNG().nextInt(100) + 150;
+//                    isDefense = true;
+//                    waitDefense = this.getRNG().nextInt(50) + 75;
+//                } else {
+//                    waitDefense--;
+//                }
+//            } else {
+//                defense--;
+//            }
+//        }
+//        if (getProfession() == 4) {
+//            if (stoneTime <= 0) {
+//                isStone = false;
+//                if (getBrightness() == 1) {
+//                    isStone = true;
+//                    stoneTime = getRNG().nextInt(50) + 125;
+//                }
+//            } else /*if (getBrightness() != 0)*/ {
+//                stoneTime--;
+//            }
+//        }
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (isCharged() && source.getImmediateSource() != null) {
-            dealDamage((EntityLivingBase)source.getImmediateSource());
-            return false;
+        if (!(source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).isCreative())) {
+            if (source.getTrueSource() != null && isCharged) {
+                dealDamage((EntityLivingBase) source.getTrueSource());
+                return false;
+            }
+            if (isDefense() || isStone()) {
+                return true;
+            }
         }
         return super.attackEntityFrom(source, amount);
     }
 
-    public void onDeath(DamageSource cause)
-    {
+    public void onDeath(DamageSource cause) {
         super.onDeath(cause);
         if (cause.getTrueSource() instanceof EntityPlayer) {
-            EntityPlayer p = (EntityPlayer)cause.getTrueSource();
+            EntityPlayer p = (EntityPlayer) cause.getTrueSource();
             if (p.getHealth() != p.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue()) {
                 if (this.world.rand.nextDouble() < 0.75) this.entityDropItem(new ItemStack(ItemManager.HEART), 0.0f);
             }
@@ -356,7 +446,12 @@ public class EntityChuChu extends EntityLiving implements IMob {
          * Returns whether the EntityAIBase should begin execution.
          */
         public boolean shouldExecute() {
-            return this.chuChu.getAttackTarget() == null && (this.chuChu.onGround || this.chuChu.isInWater() || this.chuChu.isInLava() || this.chuChu.isPotionActive(MobEffects.LEVITATION));
+            return this.chuChu.getAttackTarget() == null && !this.chuChu.isStone() && (this.chuChu.onGround || this.chuChu.isInWater() || this.chuChu.isInLava() || this.chuChu.isPotionActive(MobEffects.LEVITATION));
+        }
+
+        @Override
+        public boolean shouldContinueExecuting() {
+            return super.shouldContinueExecuting() && !this.chuChu.isStone();
         }
 
         /**
@@ -385,7 +480,12 @@ public class EntityChuChu extends EntityLiving implements IMob {
          * Returns whether the EntityAIBase should begin execution.
          */
         public boolean shouldExecute() {
-            return this.chuChu.isInWater() || this.chuChu.isInLava();
+            return !this.chuChu.isStone() && (this.chuChu.isInWater() || this.chuChu.isInLava());
+        }
+
+        @Override
+        public boolean shouldContinueExecuting() {
+            return super.shouldContinueExecuting() && !this.chuChu.isStone;
         }
 
         /**
@@ -400,43 +500,20 @@ public class EntityChuChu extends EntityLiving implements IMob {
         }
     }
 
-    static class AIChuChuHop extends EntityAIBase {
-        private final EntityChuChu chuChu;
-
-        public AIChuChuHop(EntityChuChu chuChuIn) {
-            this.chuChu = chuChuIn;
-            this.setMutexBits(5);
-        }
-
-        /**
-         * Returns whether the EntityAIBase should begin execution.
-         */
-        public boolean shouldExecute() {
-            return true;
-        }
-
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
-//        public void updateTask() {
-//            ((EntityChuChu.ChuChuMoveHelper) this.chuChu.getMoveHelper()).setSpeed(2D);
-//        }
-    }
-
-    static class ChuChuMoveHelper extends EntityMoveHelper {
+    private static class ChuChuMoveHelper extends EntityMoveHelper {
         private float yRot;
-//        public int jumpDelay;
+        //        public int jumpDelay;
         private final EntityChuChu chuChu;
         private float mvmProg;
         private int wait;
         private int jumpCharge;
         public boolean isAttacking;
-        public boolean isCharging;
+        private boolean isCharging;
 
         public ChuChuMoveHelper(EntityChuChu chuChuIn) {
             super(chuChuIn);
             this.chuChu = chuChuIn;
-            this.yRot = 180.0F * chuChu.rotationYaw / (float) Math.PI;
+            this.yRot = 180.0F * this.chuChu.rotationYaw / (float) Math.PI;
             this.action = EntityMoveHelper.Action.MOVE_TO;
             this.mvmProg = 0;
             this.wait = 0;
@@ -446,23 +523,29 @@ public class EntityChuChu extends EntityLiving implements IMob {
         }
 
         public void setDirection(float rotation) {
-            if (!this.chuChu.isAirBorne && !this.isCharging) this.yRot = rotation;
+            if (!this.chuChu.isAirBorne && !this.isCharging && !this.chuChu.isStone()) this.yRot = rotation;
         }
 
 //        public void setSpeed(double speedIn) {
 //            this.speed = speedIn;
 //        }
 
+        public boolean isCharging() {
+            return isCharging;
+        }
+
         public void onUpdateMoveHelper() {
             this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, this.yRot, 90.0F);
             this.entity.rotationYawHead = this.entity.rotationYaw;
             this.entity.renderYawOffset = this.entity.rotationYaw;
 
-            if (this.action != EntityMoveHelper.Action.MOVE_TO) {
+            if (this.chuChu.isStone) {
+                this.chuChu.setAIMoveSpeed(0);
                 this.entity.setMoveForward(0.0F);
+                this.entity.setMoveStrafing(0.0F);
             } else {
                 if (this.entity.onGround) {
-                    if (this.isAttacking && chuChu.getDistance(chuChu.getAttackTarget()) < 5/*this.jumpDelay-- <= 0*/) {
+                    if (this.isAttacking && this.chuChu.getDistance(chuChu.getAttackTarget()) < 5 && !this.chuChu.isDefense()/* && this.jumpDelay-- <= 0*/) {
                         if (!isCharging)
                             this.chuChu.faceEntity(this.chuChu.getAttackTarget(), 10.0F, 10.0F);
                         this.entity.setAIMoveSpeed(0);
@@ -470,7 +553,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
                             this.isCharging = false;
                             jumpCharge = chuChu.getRNG().nextInt(25) + 25;
 //                            this.jumpDelay = this.chuChu.getJumpDelay();
-                            this.entity.setAIMoveSpeed(0.25F + chuChu.getRNG().nextFloat());
+                            this.entity.setAIMoveSpeed(0.25F + this.chuChu.getRNG().nextFloat());
                             this.chuChu.getJumpHelper().setJumping();
                             this.chuChu.playSound(this.chuChu.getJumpSound(), this.chuChu.getSoundVolume(), ((this.chuChu.getRNG().nextFloat() - this.chuChu.getRNG().nextFloat()) * 0.2F + 1.0F) * 0.8F);
                             mvmProg = 0;
@@ -478,7 +561,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
                             this.isCharging = true;
                         }
                     } else {
-                        jumpCharge = chuChu.getRNG().nextInt(25) + 25;
+                        jumpCharge = this.chuChu.getRNG().nextInt(25) + 25;
                         isCharging = false;
                         if (wait <= 0) {
                             this.chuChu.moveStrafing = 0.0F;
@@ -495,7 +578,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
                         }
                     }
                 } else {
-                    this.entity.setAIMoveSpeed((float)this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+                    this.entity.setAIMoveSpeed((float) this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
                 }
             }
         }

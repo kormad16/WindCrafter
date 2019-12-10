@@ -11,10 +11,11 @@ import net.minecraft.util.ResourceLocation;
 public class RendererChuChu extends RenderLiving<EntityChuChu> {
 
     private static final ResourceLocation RED = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
-    private static final ResourceLocation GREEN = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
-    private static final ResourceLocation YELLOW = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
-    private static final ResourceLocation BLUE = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
-    private static final ResourceLocation BLACK = new ResourceLocation("windcrafter:textures/entities/chuchu_red.png");
+    private static final ResourceLocation GREEN = new ResourceLocation("windcrafter:textures/entities/chuchu_green.png");
+    private static final ResourceLocation YELLOW = new ResourceLocation("windcrafter:textures/entities/chuchu_yellow.png");
+    private static final ResourceLocation BLUE = new ResourceLocation("windcrafter:textures/entities/chuchu_blue.png");
+    private static final ResourceLocation BLACK = new ResourceLocation("windcrafter:textures/entities/chuchu_black.png");
+    private static final ResourceLocation BLACK_STONE = new ResourceLocation("windcrafter:textures/entities/chuchu_black_stone.png");
 
     public RendererChuChu(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelChuChu(), ModelChuChu.SHADOW_SIZE);
@@ -31,7 +32,7 @@ public class RendererChuChu extends RenderLiving<EntityChuChu> {
 
     protected ResourceLocation getEntityTexture(EntityChuChu entity) {
         switch (entity.getProfession()) {
-            case 0:
+            default:
                 return RED;
             case 1:
                 return GREEN;
@@ -40,9 +41,8 @@ public class RendererChuChu extends RenderLiving<EntityChuChu> {
             case 3:
                 return BLUE;
             case 4:
-                return BLACK;
+                return entity.isStone() ? BLACK_STONE : BLACK;
         }
-        return RED;
     }
 
 }
