@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "item",
-          "name": "windcrafter:RED_CHUJELLY",
+          "name": "windcrafter:red_chujelly",
           "weight": 50,
           "functions": [
             {
@@ -20,7 +20,7 @@
         },
         {
           "type": "item",
-          "name": "windcrafter:GREEN_CHUJELLY",
+          "name": "windcrafter:green_chujelly",
           "weight": 50,
           "functions": [
             {
