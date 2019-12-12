@@ -17,10 +17,12 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -212,15 +214,16 @@ public class EventHandler {
             World worldIn = e.getWorld();
             EntityPlayer p = e.getPlayer();
 
-            if(p.getHeldItem(EnumHand.MAIN_HAND).isItemEnchantable() && p.getHeldItem(EnumHand.MAIN_HAND).getMaxDamage() > 0)
+            if(p.getHeldItem(EnumHand.MAIN_HAND).isItemEnchantable() && p.getHeldItem(EnumHand.MAIN_HAND).getMaxDamage() > 0) {
                 breakBrokenBarricadeBlock(block, pos, worldIn);
-            else
+                worldIn.playSound(p, pos, SoundEvents.ENTITY_WITHER_BREAK_BLOCK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            }
+            else if(!p.isCreative())
                 e.setCanceled(true);
         }
     }
 
     public static void breakBrokenBarricadeBlock(BlockBrokenBarricade block, BlockPos pos, World worldIn) {
-        System.out.println("Destroying at " + pos.getX() + "; " + pos.getY() + "; " + pos.getZ());
         worldIn.destroyBlock(pos, false);
         worldIn.tick();
         for(int x = pos.getX() - 1; x <= pos.getX() + 1; x++) {

@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockBrokenBarricade extends Block {
+public class BlockWoodenBarricade extends Block {
 
     public static final PropertyBool DOWN = PropertyBool.create("down");
     public static final PropertyBool UP = PropertyBool.create("up");
@@ -28,11 +28,12 @@ public class BlockBrokenBarricade extends Block {
     public static final PropertyBool WEST = PropertyBool.create("west");
     public static final PropertyBool EAST = PropertyBool.create("east");
 
-    public BlockBrokenBarricade() {
+    public BlockWoodenBarricade() {
         super(Material.WOOD);
         this.setCreativeTab(CreativeTabs.DECORATIONS);
-        setUnlocalizedName("broken_barricade");
-        setRegistryName("broken_barricade");
+        setUnlocalizedName("wooden_barricade");
+        setRegistryName("wooden_barricade");
+        setBlockUnbreakable();
 
         this.setDefaultState(this.getBlockState().getBaseState()
                 .withProperty(UP, false)
@@ -71,7 +72,7 @@ public class BlockBrokenBarricade extends Block {
     private boolean canConnect(IBlockAccess worldIn, BlockPos origin, EnumFacing side) {
         BlockPos off = origin.offset(side);
         Block block = worldIn.getBlockState(off).getBlock();
-        return block instanceof BlockBrokenBarricade;
+        return block instanceof BlockWoodenBarricade;
     }
 
     @Override
@@ -98,7 +99,7 @@ public class BlockBrokenBarricade extends Block {
     {
         IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
         Block block = iblockstate.getBlock();
-        return !(iblockstate.getBlock() instanceof BlockBrokenBarricade);
+        return !(iblockstate.getBlock() instanceof BlockWoodenBarricade);
     }
 
     @Override
