@@ -52,3 +52,5 @@ item.heros_charm.name=Hero's Charm
 
 entity.bokoblin.name=Bokoblin
 entity.moblin.name=Moblin
+
+tile.broken_barricade.name=Broken Barricade

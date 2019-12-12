@@ -25,10 +25,6 @@ public class GuiZeldaMagic extends GuiIngame {
             k = (int)(183.0f*(((double)(this.mc.player.getEntityData().getInteger("ZeldaMagic")) / (double)(this.mc.player.getEntityData().getInteger("ZeldaMagicMax"))) / (double)(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")==100?2:1)));
         int l = 16 + (this.mc.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue() > 20 ? 10 : 0);
         this.drawTexturedModalRect(5, l, 0, 64, 182/(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")==100?2:1), 5);
-        System.out.println("Magic: " + (double)(this.mc.player.getEntityData().getInteger("ZeldaMagic")));
-        System.out.println("MagicMax: " + (double)(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")));
-        System.out.println("Divider: " + (double)(this.mc.player.getEntityData().getInteger("ZeldaMagicMax")==100?2:1));
-        System.out.println(k);
         if (k > 0)
         {
             this.drawTexturedModalRect(5, l, 0, 69, k, 5);

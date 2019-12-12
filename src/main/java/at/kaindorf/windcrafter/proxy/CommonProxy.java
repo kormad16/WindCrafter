@@ -1,6 +1,7 @@
 package at.kaindorf.windcrafter.proxy;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
+import at.kaindorf.windcrafter.init.BlockManager;
 import at.kaindorf.windcrafter.init.EntityManager;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.init.TradeManager;
@@ -44,17 +45,19 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> e) {
-
+        BlockManager.registerBlocks(e);
     }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> e) {
         ItemManager.registerItems(e);
+        BlockManager.registerBlockItems(e);
     }
 
     @SubscribeEvent
     public static void registerRenders(ModelRegistryEvent e) {
         ItemManager.registerRenders(e);
+        BlockManager.registerRenders(e);
     }
 
 }

@@ -1,6 +1,7 @@
 package at.kaindorf.windcrafter.event;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
+import at.kaindorf.windcrafter.blocks.BlockBrokenBarricade;
 import at.kaindorf.windcrafter.gui.GuiZeldaHealth;
 import at.kaindorf.windcrafter.gui.GuiZeldaMagic;
 import at.kaindorf.windcrafter.init.ItemManager;
@@ -8,6 +9,7 @@ import at.kaindorf.windcrafter.init.SoundManager;
 import at.kaindorf.windcrafter.items.ItemHerosCharm;
 import at.kaindorf.windcrafter.items.ItemHerosSword;
 import at.kaindorf.windcrafter.items.ItemMagicJar;
+import jdk.nashorn.internal.ir.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -19,10 +21,12 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -197,6 +201,38 @@ public class EventHandler {
                 e.player.getEntityData().setByte("LowHealthTimer", (byte)100);
             } else
                 e.player.getEntityData().setByte("LowHealthTimer", (byte)(e.player.getEntityData().getByte("LowHealthTimer")-1));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent e) {
+        if(e.getState().getBlock() instanceof BlockBrokenBarricade) {
+            BlockBrokenBarricade block = (BlockBrokenBarricade) e.getState().getBlock();
+            BlockPos pos = e.getPos();
+            World worldIn = e.getWorld();
+            EntityPlayer p = e.getPlayer();
+
+            if(p.getHeldItem(EnumHand.MAIN_HAND).isItemEnchantable() && p.getHeldItem(EnumHand.MAIN_HAND).getMaxDamage() > 0)
+                breakBrokenBarricadeBlock(block, pos, worldIn);
+            else
+                e.setCanceled(true);
+        }
+    }
+
+    public static void breakBrokenBarricadeBlock(BlockBrokenBarricade block, BlockPos pos, World worldIn) {
+        System.out.println("Destroying at " + pos.getX() + "; " + pos.getY() + "; " + pos.getZ());
+        worldIn.destroyBlock(pos, false);
+        worldIn.tick();
+        for(int x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
+            for(int y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
+                for(int z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
+                    BlockPos position = new BlockPos(x,y,z);
+                    if(worldIn.getBlockState(position).getBlock() instanceof BlockBrokenBarricade) {
+                        BlockBrokenBarricade barricadeBlock = (BlockBrokenBarricade)worldIn.getBlockState(position).getBlock();
+                        breakBrokenBarricadeBlock(barricadeBlock, position, worldIn);
+                    }
+                }
+            }
         }
     }
 

@@ -1,0 +1,78 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "windcrafter:broken_barricade_c0"
+  },
+  "variants": {
+    "inventory": {"model": "windcrafter:broken_barricade_c0"},
+    "normal": {"model": "windcrafter:broken_barricade_c0"},
+
+    "down=false,east=false,north=false,south=false,up=false,west=false": {"model": "windcrafter:broken_barricade_c0"},
+    "down=true,east=false,north=false,south=false,up=false,west=false": {"model": "windcrafter:broken_barricade_c0"},
+    "down=true,east=false,north=false,south=false,up=true,west=false": {"model": "windcrafter:broken_barricade_c0"},
+    "down=false,east=false,north=false,south=false,up=true,west=false": {"model": "windcrafter:broken_barricade_c0"},
+
+    "down=false,east=true,north=false,south=false,up=false,west=false": {"model": "windcrafter:broken_barricade_c1"},
+    "down=true,east=true,north=false,south=false,up=false,west=false": {"model": "windcrafter:broken_barricade_c1"},
+    "down=false,east=true,north=false,south=false,up=true,west=false": {"model": "windcrafter:broken_barricade_c1"},
+    "down=true,east=true,north=false,south=false,up=true,west=false": {"model": "windcrafter:broken_barricade_c1"},
+
+    "down=false,east=false,north=false,south=false,up=false,west=true": {"model": "windcrafter:broken_barricade_c1", "y": 180},
+    "down=true,east=false,north=false,south=false,up=false,west=true": {"model": "windcrafter:broken_barricade_c1", "y": 180},
+    "down=false,east=false,north=false,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c1", "y": 180},
+    "down=true,east=false,north=false,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c1", "y": 180},
+
+    "down=false,east=false,north=true,south=false,up=false,west=false": {"model": "windcrafter:broken_barricade_c1", "y": 270},
+    "down=true,east=false,north=true,south=false,up=false,west=false": {"model": "windcrafter:broken_barricade_c1", "y": 270},
+    "down=false,east=false,north=true,south=false,up=true,west=false": {"model": "windcrafter:broken_barricade_c1", "y": 270},
+    "down=true,east=false,north=true,south=false,up=true,west=false": {"model": "windcrafter:broken_barricade_c1", "y": 270},
+
+    "down=false,east=false,north=false,south=true,up=false,west=false": {"model": "windcrafter:broken_barricade_c1", "y": 90},
+    "down=true,east=false,north=false,south=true,up=false,west=false": {"model": "windcrafter:broken_barricade_c1", "y": 90},
+    "down=false,east=false,north=false,south=true,up=true,west=false": {"model": "windcrafter:broken_barricade_c1", "y": 90},
+    "down=true,east=false,north=false,south=true,up=true,west=false": {"model": "windcrafter:broken_barricade_c1", "y": 90},
+
+    "down=false,east=false,north=false,south=false,up=false,west=true": {"model": "windcrafter:broken_barricade_c1", "y": 180},
+    "down=true,east=false,north=false,south=false,up=false,west=true": {"model": "windcrafter:broken_barricade_c1", "y": 180},
+    "down=false,east=false,north=false,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c1", "y": 180},
+    "down=true,east=false,north=false,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c1", "y": 180},
+
+    "down=false,east=false,north=true,south=false,up=false,west=true": {"model": "windcrafter:broken_barricade_c2c"},
+    "down=true,east=false,north=true,south=false,up=false,west=true": {"model": "windcrafter:broken_barricade_c2c"},
+    "down=false,east=false,north=true,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c2c"},
+    "down=true,east=false,north=true,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c2c"},
+
+    "down=false,east=true,north=false,south=true,up=false,west=false": {"model": "windcrafter:broken_barricade_c2c"},
+    "down=true,east=true,north=false,south=true,up=false,west=false": {"model": "windcrafter:broken_barricade_c2c"},
+    "down=false,east=true,north=false,south=true,up=true,west=false": {"model": "windcrafter:broken_barricade_c2c"},
+    "down=true,east=true,north=false,south=true,up=true,west=false": {"model": "windcrafter:broken_barricade_c2c"},
+
+    "down=false,east=false,north=false,south=true,up=false,west=true": {"model": "windcrafter:broken_barricade_c2c", "y": 90},
+    "down=true,east=false,north=false,south=true,up=false,west=true": {"model": "windcrafter:broken_barricade_c2c", "y": 90},
+    "down=false,east=false,north=false,south=true,up=true,west=true": {"model": "windcrafter:broken_barricade_c2c", "y": 90},
+    "down=true,east=false,north=false,south=true,up=true,west=true": {"model": "windcrafter:broken_barricade_c2c", "y": 90},
+
+    "down=false,east=true,north=true,south=false,up=false,west=false": {"model": "windcrafter:broken_barricade_c2c", "y": 90},
+    "down=true,east=true,north=true,south=false,up=false,west=false": {"model": "windcrafter:broken_barricade_c2c", "y": 90},
+    "down=false,east=true,north=true,south=false,up=true,west=false": {"model": "windcrafter:broken_barricade_c2c", "y": 90},
+    "down=true,east=true,north=true,south=false,up=true,west=false": {"model": "windcrafter:broken_barricade_c2c", "y": 90},
+
+    "down=false,east=true,north=false,south=false,up=false,west=true": {"model": "windcrafter:broken_barricade_c2"},
+    "down=true,east=true,north=false,south=false,up=false,west=true": {"model": "windcrafter:broken_barricade_c2"},
+    "down=false,east=true,north=false,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c2"},
+    "down=true,east=true,north=false,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c2"},
+
+    "down=false,east=false,north=true,south=true,up=false,west=false": {"model": "windcrafter:broken_barricade_c2"},
+    "down=true,east=false,north=true,south=true,up=false,west=false": {"model": "windcrafter:broken_barricade_c2"},
+    "down=false,east=false,north=true,south=true,up=true,west=false": {"model": "windcrafter:broken_barricade_c2"},
+    "down=true,east=false,north=true,south=true,up=true,west=false": {"model": "windcrafter:broken_barricade_c2"},
+
+    "down=true,east=true,north=true,south=true,up=true,west=true": {"model": "windcrafter:broken_barricade_c6"},
+    "down=false,east=true,north=true,south=true,up=true,west=true": {"model": "windcrafter:broken_barricade_c6"},
+    "down=true,east=false,north=true,south=true,up=true,west=true": {"model": "windcrafter:broken_barricade_c6"},
+    "down=true,east=true,north=false,south=true,up=true,west=true": {"model": "windcrafter:broken_barricade_c6"},
+    "down=true,east=true,north=true,south=false,up=true,west=true": {"model": "windcrafter:broken_barricade_c6"},
+    "down=true,east=true,north=true,south=true,up=false,west=true": {"model": "windcrafter:broken_barricade_c6"},
+    "down=true,east=true,north=true,south=true,up=true,west=false": {"model": "windcrafter:broken_barricade_c6"}
+  }
+}
