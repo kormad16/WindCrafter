@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class EntityManager {
 
     private static int nextEntityId = 1;
-    private static RegistryEvent.Register<EntityEntry> Event;
 
     public static void initEntities(RegistryEvent.Register<EntityEntry> event) {
         // Mobs

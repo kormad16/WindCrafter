@@ -51,9 +51,13 @@ public class EntityChuChu extends EntityLiving implements IMob {
     private int defense = 0;
     private int waitDefense = 0;
     private int stoneTime = 0;
-    private boolean isDefense = false;
-    private boolean isCharged = false;
-    private boolean isStone = false;
+//    private boolean isDefense = false;
+//    private boolean isCharged = false;
+//    private boolean isStone = false;
+    private static final DataParameter<Boolean> IS_DEFENSE = EntityDataManager.<Boolean>createKey(EntityChuChu.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_CHARGED = EntityDataManager.<Boolean>createKey(EntityChuChu.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_STONE = EntityDataManager.<Boolean>createKey(EntityChuChu.class, DataSerializers.BOOLEAN);
+
 
     public EntityChuChu(World worldIn) {
         super(worldIn);
@@ -72,6 +76,9 @@ public class EntityChuChu extends EntityLiving implements IMob {
     protected void entityInit() {
         super.entityInit();
         this.getDataManager().register(PROFESSION, Integer.valueOf(0));
+        this.getDataManager().register(IS_CHARGED, Boolean.valueOf(false));
+        this.getDataManager().register(IS_DEFENSE, Boolean.valueOf(false));
+        this.getDataManager().register(IS_STONE, Boolean.valueOf(false));
     }
 
     @Override
@@ -96,15 +103,27 @@ public class EntityChuChu extends EntityLiving implements IMob {
     }
 
     public boolean isCharged() {
-        return this.isCharged;
+        return this.dataManager.get(IS_CHARGED);
+    }
+
+    public void setCharged(boolean charged) {
+        this.dataManager.set(IS_CHARGED, Boolean.valueOf(charged));
     }
 
     public boolean isDefense() {
-        return this.isDefense;
+        return this.dataManager.get(IS_DEFENSE);
+    }
+
+    public void setDefense(boolean defense) {
+        this.dataManager.set(IS_DEFENSE, Boolean.valueOf(defense));
     }
 
     public boolean isStone() {
-        return this.isStone;
+        return this.dataManager.get(IS_STONE);
+    }
+
+    public void setStone(boolean stone) {
+        this.dataManager.set(IS_STONE, Boolean.valueOf(stone));
     }
 
     /**
@@ -143,11 +162,12 @@ public class EntityChuChu extends EntityLiving implements IMob {
         } else if (!this.onGround && this.wasOnGround) {
             this.squishAmount = 1.0F;
         }
-        if (isDefense) {
+        if (isDefense()) {
             this.squishAmount = -1.2f;
-        } else if (((ChuChuMoveHelper)this.getMoveHelper()).isCharging()) {
-            this.squishAmount = -0.5f;
         }
+//        else if (((ChuChuMoveHelper)this.getMoveHelper()).isCharging()) {
+//            this.squishAmount = -0.5f;
+//        }
 
         this.wasOnGround = this.onGround;
         this.alterSquishAmount();
@@ -178,7 +198,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
 
     protected void dealDamage(EntityLivingBase entityIn) {
         if (this.isEntityAlive() && this.canEntityBeSeen(entityIn) && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttackStrength())) {
-            if (isCharged && !((EntityPlayer) entityIn).isCreative()) {
+            if (isCharged() && !((EntityPlayer) entityIn).isCreative()) {
                 entityIn.getEntityData().setInteger("DamageCoolDown", 75);
                 for (PotionEffect p : PotionTypes.SLOWNESS.getEffects())
                     entityIn.addPotionEffect(new PotionEffect(p.getPotion(), 25, 255));
@@ -269,10 +289,10 @@ public class EntityChuChu extends EntityLiving implements IMob {
             case 2:
             case 3:
                 if (chargedTime <= 0) {
-                    isCharged = false;
+                    setCharged(false);
                     if (noCharge <= 0) {
                         chargedTime = this.getRNG().nextInt(100) + 150;
-                        isCharged = true;
+                        setCharged(true);
                         noCharge = this.getRNG().nextInt(50) + 75;
                     } else {
                         noCharge--;
@@ -283,10 +303,10 @@ public class EntityChuChu extends EntityLiving implements IMob {
                 if (getProfession() == 2) break;
             case 1:
                 if (defense <= 0) {
-                    isDefense = false;
+                    setDefense(false);
                     if (waitDefense <= 0) {
                         defense = this.getRNG().nextInt(100) + 150;
-                        isDefense = true;
+                        setDefense(true);
                         waitDefense = this.getRNG().nextInt(50) + 75;
                     } else {
                         waitDefense--;
@@ -297,9 +317,9 @@ public class EntityChuChu extends EntityLiving implements IMob {
                 break;
             case 4:
                 if (stoneTime <= 0) {
-                    isStone = false;
+                    setStone(false);
                     if (getBrightness() == 1) {
-                        isStone = true;
+                        setStone(true);
                         stoneTime = getRNG().nextInt(50) + 125;
                     }
                 } else if (getBrightness() != 1) {
@@ -351,7 +371,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (!(source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).isCreative())) {
-            if (source.getTrueSource() != null && isCharged) {
+            if (source.getTrueSource() != null && isCharged()) {
                 dealDamage((EntityLivingBase) source.getTrueSource());
                 return false;
             }
@@ -485,7 +505,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
 
         @Override
         public boolean shouldContinueExecuting() {
-            return super.shouldContinueExecuting() && !this.chuChu.isStone;
+            return super.shouldContinueExecuting() && !this.chuChu.isStone();
         }
 
         /**
@@ -502,7 +522,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
 
     private static class ChuChuMoveHelper extends EntityMoveHelper {
         private float yRot;
-        //        public int jumpDelay;
+//        public int jumpDelay;
         private final EntityChuChu chuChu;
         private float mvmProg;
         private int wait;
@@ -514,21 +534,15 @@ public class EntityChuChu extends EntityLiving implements IMob {
             super(chuChuIn);
             this.chuChu = chuChuIn;
             this.yRot = 180.0F * this.chuChu.rotationYaw / (float) Math.PI;
-            this.action = EntityMoveHelper.Action.MOVE_TO;
             this.mvmProg = 0;
             this.wait = 0;
             this.jumpCharge = chuChu.getRNG().nextInt(25) + 25;
             this.isAttacking = false;
-//            this.jumpDelay = this.chuChu.getJumpDelay();
         }
 
         public void setDirection(float rotation) {
             if (!this.chuChu.isAirBorne && !this.isCharging && !this.chuChu.isStone()) this.yRot = rotation;
         }
-
-//        public void setSpeed(double speedIn) {
-//            this.speed = speedIn;
-//        }
 
         public boolean isCharging() {
             return isCharging;
@@ -539,8 +553,8 @@ public class EntityChuChu extends EntityLiving implements IMob {
             this.entity.rotationYawHead = this.entity.rotationYaw;
             this.entity.renderYawOffset = this.entity.rotationYaw;
 
-            if (this.chuChu.isStone) {
-                this.chuChu.setAIMoveSpeed(0);
+            if (this.chuChu.isStone()) {
+                this.chuChu.setAIMoveSpeed(0.0F);
                 this.entity.setMoveForward(0.0F);
                 this.entity.setMoveStrafing(0.0F);
             } else {
