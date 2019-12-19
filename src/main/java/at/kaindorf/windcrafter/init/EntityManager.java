@@ -28,18 +28,17 @@ import java.util.stream.Collectors;
 public class EntityManager {
 
     private static int nextEntityId = 1;
-    private static RegistryEvent.Register<EntityEntry> Event;
 
     public static void initEntities(RegistryEvent.Register<EntityEntry> event) {
         // Mobs
         event.getRegistry().register(getEntityWithSpawnEgg(
-                EntityBokoblin.class, "bokoblin", 80, 3, true, 0x213C39, 0x526D7B, EnumCreatureType.MONSTER, 10, 2, 4, getBiomesFromStrings(EntityBokoblin.BIOMES)
+                EntityBokoblin.class, "bokoblin", 80, 3, true, 0x213C39, 0x526D7B, EnumCreatureType.MONSTER, 20, 2, 4, getBiomesFromStrings(EntityBokoblin.BIOMES)
         ).build());
         event.getRegistry().register(getEntityWithSpawnEgg(
-                EntityMoblin.class, "moblin", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 10, 2, 4, getBiomesFromStrings(EntityMoblin.BIOMES)
+                EntityMoblin.class, "moblin", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 20, 2, 4, getBiomesFromStrings(EntityMoblin.BIOMES)
         ).build());
         event.getRegistry().register(getEntityWithSpawnEgg(
-                EntityChuChu.class, "chuchu", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 10, 2, 4, getBiomesFromStrings(EntityChuChu.BIOMES)
+                EntityChuChu.class, "chuchu", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 20, 2, 4, getBiomesFromStrings(EntityChuChu.BIOMES)
         ).build());
 
         // Projectiles

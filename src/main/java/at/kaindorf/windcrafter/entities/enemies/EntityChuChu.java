@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
@@ -46,14 +47,23 @@ public class EntityChuChu extends EntityLiving implements IMob {
     public float squishFactor;
     public float prevSquishFactor;
     private boolean wasOnGround;
-    private int chargedTime = 0;
-    private int noCharge = 0;
-    private int defense = 0;
-    private int waitDefense = 0;
-    private int stoneTime = 0;
-    private boolean isDefense = false;
-    private boolean isCharged = false;
-    private boolean isStone = false;
+//    private int chargedTime = 0;
+//    private int noCharge = 0;
+//    private int defense = 0;
+//    private int waitDefense = 0;
+//    private int stoneTime = 0;
+
+    private static final DataParameter<Integer> CHARGED_TIME = EntityDataManager.<Integer>createKey(EntityChuChu.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> WAIT_CHARGE = EntityDataManager.<Integer>createKey(EntityChuChu.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> DEFENSE_TIME = EntityDataManager.<Integer>createKey(EntityChuChu.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> WAIT_DEFENSE = EntityDataManager.<Integer>createKey(EntityChuChu.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> STONE_TIME = EntityDataManager.<Integer>createKey(EntityChuChu.class, DataSerializers.VARINT);
+
+    private static final DataParameter<Boolean> IS_DEFENSE = EntityDataManager.<Boolean>createKey(EntityChuChu.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_CHARGED = EntityDataManager.<Boolean>createKey(EntityChuChu.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_STONE = EntityDataManager.<Boolean>createKey(EntityChuChu.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_CHARGING = EntityDataManager.<Boolean>createKey(EntityChuChu.class, DataSerializers.BOOLEAN);
+
 
     public EntityChuChu(World worldIn) {
         super(worldIn);
@@ -71,7 +81,18 @@ public class EntityChuChu extends EntityLiving implements IMob {
 
     protected void entityInit() {
         super.entityInit();
+
         this.getDataManager().register(PROFESSION, Integer.valueOf(0));
+        this.getDataManager().register(IS_CHARGED, Boolean.valueOf(false));
+        this.getDataManager().register(IS_DEFENSE, Boolean.valueOf(false));
+        this.getDataManager().register(IS_STONE, Boolean.valueOf(false));
+        this.getDataManager().register(IS_CHARGING, Boolean.valueOf(false));
+
+        this.getDataManager().register(CHARGED_TIME, Integer.valueOf(0));
+        this.getDataManager().register(WAIT_CHARGE, Integer.valueOf(0));
+        this.getDataManager().register(DEFENSE_TIME, Integer.valueOf(0));
+        this.getDataManager().register(WAIT_DEFENSE, Integer.valueOf(0));
+        this.getDataManager().register(STONE_TIME, Integer.valueOf(0));
     }
 
     @Override
@@ -95,17 +116,82 @@ public class EntityChuChu extends EntityLiving implements IMob {
         this.dataManager.set(PROFESSION, Integer.valueOf(profession));
     }
 
+    // BOOLEANS
     public boolean isCharged() {
-        return this.isCharged;
+        return this.dataManager.get(IS_CHARGED);
+    }
+
+    public void setCharged(boolean charged) {
+        this.dataManager.set(IS_CHARGED, Boolean.valueOf(charged));
     }
 
     public boolean isDefense() {
-        return this.isDefense;
+        return this.dataManager.get(IS_DEFENSE);
+    }
+
+    public void setDefense(boolean defense) {
+        this.dataManager.set(IS_DEFENSE, Boolean.valueOf(defense));
     }
 
     public boolean isStone() {
-        return this.isStone;
+        return this.dataManager.get(IS_STONE);
     }
+
+    public void setStone(boolean stone) {
+        this.dataManager.set(IS_STONE, Boolean.valueOf(stone));
+    }
+
+    public boolean isCharging() {
+        return this.dataManager.get(IS_CHARGING);
+    }
+
+    private void setCharging(boolean isCharging) {
+        this.dataManager.set(IS_CHARGING, Boolean.valueOf(isCharging));
+    }
+
+    // COUNTERS ETC
+    public int getChargedTime() {
+        return this.dataManager.get(CHARGED_TIME);
+    }
+
+    private void setChargedTime(int chargeTime) {
+        this.dataManager.set(CHARGED_TIME, Integer.valueOf(chargeTime));
+    }
+
+    public int getWaitCharge() {
+        return this.dataManager.get(WAIT_CHARGE);
+    }
+
+    private void setWaitCharge(int waitCharge) {
+        this.dataManager.set(WAIT_CHARGE, Integer.valueOf(waitCharge));
+    }
+
+    public int getDefenseTime() {
+        return this.dataManager.get(DEFENSE_TIME);
+    }
+
+    private void setDefenseTime(int defenseTime) {
+        this.dataManager.set(DEFENSE_TIME, Integer.valueOf(defenseTime));
+    }
+
+    public int getWaitDefense() {
+        return this.dataManager.get(WAIT_DEFENSE);
+    }
+
+    private void setWaitDefense(int waitDefense) {
+        this.dataManager.set(WAIT_DEFENSE, Integer.valueOf(waitDefense));
+    }
+
+    public int getStoneTime() {
+        return this.dataManager.get(STONE_TIME);
+    }
+
+    private void setStoneTime(int stoneTime) {
+        this.dataManager.set(STONE_TIME, Integer.valueOf(stoneTime));
+    }
+
+
+
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
@@ -143,14 +229,59 @@ public class EntityChuChu extends EntityLiving implements IMob {
         } else if (!this.onGround && this.wasOnGround) {
             this.squishAmount = 1.0F;
         }
-        if (isDefense) {
+        if (isDefense()) {
             this.squishAmount = -1.2f;
-        } else if (((ChuChuMoveHelper)this.getMoveHelper()).isCharging()) {
+        }
+        else if (isCharging()) {
             this.squishAmount = -0.5f;
         }
 
         this.wasOnGround = this.onGround;
         this.alterSquishAmount();
+
+        // Type Specific Logic
+        switch (this.getProfession()) {
+            case 2:
+            case 3:
+                if (getChargedTime() <= 0) {
+                    setCharged(false);
+                    if (getWaitCharge() <= 0) {
+                        setChargedTime(this.getRNG().nextInt(100) + 150);
+                        setCharged(true);
+                        setWaitCharge(this.getRNG().nextInt(50) + 75);
+                    } else {
+                        setWaitCharge(getWaitCharge()-1);
+                    }
+                } else {
+                    setChargedTime(getChargedTime()-1);
+                }
+                if (getProfession() == 2) break;
+            case 1:
+                if (getDefenseTime() <= 0) {
+                    setDefense(false);
+                    if (getWaitDefense() <= 0) {
+                        setDefenseTime(this.getRNG().nextInt(100) + 150);
+                        setDefense(true);
+                        setWaitDefense(this.getRNG().nextInt(50) + 75);
+                    } else {
+                        setWaitDefense(getWaitDefense()-1);
+                    }
+                } else {
+                    setDefenseTime(getDefenseTime()-1);
+                }
+                break;
+            case 4:
+                if (getStoneTime() <= 0) {
+                    setStone(false);
+                    if (getBrightness() == 1) {
+                        setStone(true);
+                        setStoneTime(getRNG().nextInt(50) + 125);
+                    }
+                } else if (getBrightness() != 1) {
+                    setStoneTime(getStoneTime()-1);
+                }
+                break;
+        }
     }
 
     protected void alterSquishAmount() {
@@ -178,7 +309,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
 
     protected void dealDamage(EntityLivingBase entityIn) {
         if (this.isEntityAlive() && this.canEntityBeSeen(entityIn) && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getAttackStrength())) {
-            if (isCharged && !((EntityPlayer) entityIn).isCreative()) {
+            if (isCharged() && !((EntityPlayer) entityIn).isCreative()) {
                 entityIn.getEntityData().setInteger("DamageCoolDown", 75);
                 for (PotionEffect p : PotionTypes.SLOWNESS.getEffects())
                     entityIn.addPotionEffect(new PotionEffect(p.getPotion(), 25, 255));
@@ -253,7 +384,18 @@ public class EntityChuChu extends EntityLiving implements IMob {
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         IEntityLivingData livingData = super.onInitialSpawn(difficulty, livingdata);
 
-        this.setProfession(this.rand.nextInt(getBrightness() == 1 ? 4 : 5));
+        int rand = this.rand.nextInt(14 + (getBrightness() == 1 ? 0 : 2));
+        if (rand < 6) {
+            this.setProfession(0);
+        } else if (rand < 9) {
+            this.setProfession(1);
+        } else if (rand < 13) {
+            this.setProfession(2);
+        } else if (rand < 14) {
+            this.setProfession(3);
+        } else {
+            this.setProfession(4);
+        }
 
         return livingData;
     }
@@ -262,104 +404,69 @@ public class EntityChuChu extends EntityLiving implements IMob {
         return SoundManager.chuChuJump;
     }
 
-    @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
-        switch (this.getProfession()) {
-            case 2:
-            case 3:
-                if (chargedTime <= 0) {
-                    isCharged = false;
-                    if (noCharge <= 0) {
-                        chargedTime = this.getRNG().nextInt(100) + 150;
-                        isCharged = true;
-                        noCharge = this.getRNG().nextInt(50) + 75;
-                    } else {
-                        noCharge--;
-                    }
-                } else {
-                    chargedTime--;
-                }
-                if (getProfession() == 2) break;
-            case 1:
-                if (defense <= 0) {
-                    isDefense = false;
-                    if (waitDefense <= 0) {
-                        defense = this.getRNG().nextInt(100) + 150;
-                        isDefense = true;
-                        waitDefense = this.getRNG().nextInt(50) + 75;
-                    } else {
-                        waitDefense--;
-                    }
-                } else {
-                    defense--;
-                }
-                break;
-            case 4:
-                if (stoneTime <= 0) {
-                    isStone = false;
-                    if (getBrightness() == 1) {
-                        isStone = true;
-                        stoneTime = getRNG().nextInt(50) + 125;
-                    }
-                } else if (getBrightness() != 1) {
-                    stoneTime--;
-                }
-                break;
-        }
-//        if (getProfession() == 2 || getProfession() == 3) {
-//            if (chargedTime <= 0) {
-//                isCharged = false;
-//                if (noCharge <= 0) {
-//                    chargedTime = this.getRNG().nextInt(100) + 150;
-//                    isCharged = true;
-//                    noCharge = this.getRNG().nextInt(50) + 75;
+//    @Override
+//    public void onLivingUpdate() {
+//        super.onLivingUpdate();
+//        switch (this.getProfession()) {
+//            case 2:
+//            case 3:
+//                if (chargedTime <= 0) {
+//                    setCharged(false);
+//                    if (noCharge <= 0) {
+//                        chargedTime = this.getRNG().nextInt(100) + 150;
+//                        setCharged(true);
+//                        noCharge = this.getRNG().nextInt(50) + 75;
+//                    } else {
+//                        noCharge--;
+//                    }
 //                } else {
-//                    noCharge--;
+//                    chargedTime--;
 //                }
-//            } else {
-//                chargedTime--;
-//            }
-//        }
-//        if (getProfession() == 1 || getProfession() == 3) {
-//            if (defense <= 0) {
-//                isDefense = false;
-//                if (waitDefense <= 0) {
-//                    defense = this.getRNG().nextInt(100) + 150;
-//                    isDefense = true;
-//                    waitDefense = this.getRNG().nextInt(50) + 75;
+//                if (getProfession() == 2) break;
+//            case 1:
+//                if (defense <= 0) {
+//                    setDefense(false);
+//                    if (waitDefense <= 0) {
+//                        defense = this.getRNG().nextInt(100) + 150;
+//                        setDefense(true);
+//                        waitDefense = this.getRNG().nextInt(50) + 75;
+//                    } else {
+//                        waitDefense--;
+//                    }
 //                } else {
-//                    waitDefense--;
+//                    defense--;
 //                }
-//            } else {
-//                defense--;
-//            }
-//        }
-//        if (getProfession() == 4) {
-//            if (stoneTime <= 0) {
-//                isStone = false;
-//                if (getBrightness() == 1) {
-//                    isStone = true;
-//                    stoneTime = getRNG().nextInt(50) + 125;
+//                break;
+//            case 4:
+//                if (stoneTime <= 0) {
+//                    setStone(false);
+//                    if (getBrightness() == 1) {
+//                        setStone(true);
+//                        stoneTime = getRNG().nextInt(50) + 125;
+//                    }
+//                } else if (getBrightness() != 1) {
+//                    stoneTime--;
 //                }
-//            } else /*if (getBrightness() != 0)*/ {
-//                stoneTime--;
-//            }
+//                break;
 //        }
-    }
+//    }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (!(source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).isCreative())) {
-            if (source.getTrueSource() != null && isCharged) {
-                dealDamage((EntityLivingBase) source.getTrueSource());
-                return false;
-            }
-            if (isDefense() || isStone()) {
+        if (
+                (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())
+                || (source.getImmediateSource() instanceof EntityArrow && !isDefense())
+        ) {
+            return super.attackEntityFrom(source, amount);
+        } else {
+            if (source.getTrueSource() instanceof EntityPlayer && (isDefense() || isStone() || isCharged())) {
+                if (isCharged() && source.getTrueSource() != null && !(source.getImmediateSource() instanceof EntityArrow))
+                    dealDamage((EntityLivingBase) source.getTrueSource());
                 return true;
+            } else {
+                return super.attackEntityFrom(source, amount);
             }
         }
-        return super.attackEntityFrom(source, amount);
     }
 
     public void onDeath(DamageSource cause) {
@@ -485,7 +592,7 @@ public class EntityChuChu extends EntityLiving implements IMob {
 
         @Override
         public boolean shouldContinueExecuting() {
-            return super.shouldContinueExecuting() && !this.chuChu.isStone;
+            return super.shouldContinueExecuting() && !this.chuChu.isStone();
         }
 
         /**
@@ -495,43 +602,29 @@ public class EntityChuChu extends EntityLiving implements IMob {
             if (this.chuChu.getRNG().nextFloat() < 0.8F) {
                 this.chuChu.getJumpHelper().setJumping();
             }
-
-//            ((EntityChuChu.ChuChuMoveHelper) this.chuChu.getMoveHelper()).setSpeed(0.5D);
         }
     }
 
     private static class ChuChuMoveHelper extends EntityMoveHelper {
         private float yRot;
-        //        public int jumpDelay;
         private final EntityChuChu chuChu;
         private float mvmProg;
         private int wait;
         private int jumpCharge;
         public boolean isAttacking;
-        private boolean isCharging;
 
         public ChuChuMoveHelper(EntityChuChu chuChuIn) {
             super(chuChuIn);
             this.chuChu = chuChuIn;
             this.yRot = 180.0F * this.chuChu.rotationYaw / (float) Math.PI;
-            this.action = EntityMoveHelper.Action.MOVE_TO;
             this.mvmProg = 0;
             this.wait = 0;
             this.jumpCharge = chuChu.getRNG().nextInt(25) + 25;
             this.isAttacking = false;
-//            this.jumpDelay = this.chuChu.getJumpDelay();
         }
 
         public void setDirection(float rotation) {
-            if (!this.chuChu.isAirBorne && !this.isCharging && !this.chuChu.isStone()) this.yRot = rotation;
-        }
-
-//        public void setSpeed(double speedIn) {
-//            this.speed = speedIn;
-//        }
-
-        public boolean isCharging() {
-            return isCharging;
+            if (!this.chuChu.isAirBorne && !chuChu.isCharging() && !this.chuChu.isStone()) this.yRot = rotation;
         }
 
         public void onUpdateMoveHelper() {
@@ -539,30 +632,29 @@ public class EntityChuChu extends EntityLiving implements IMob {
             this.entity.rotationYawHead = this.entity.rotationYaw;
             this.entity.renderYawOffset = this.entity.rotationYaw;
 
-            if (this.chuChu.isStone) {
-                this.chuChu.setAIMoveSpeed(0);
+            if (this.chuChu.isStone()) {
+                this.chuChu.setAIMoveSpeed(0.0F);
                 this.entity.setMoveForward(0.0F);
                 this.entity.setMoveStrafing(0.0F);
             } else {
                 if (this.entity.onGround) {
-                    if (this.isAttacking && this.chuChu.getDistance(chuChu.getAttackTarget()) < 5 && !this.chuChu.isDefense()/* && this.jumpDelay-- <= 0*/) {
-                        if (!isCharging)
+                    if (this.isAttacking && this.chuChu.getDistance(chuChu.getAttackTarget()) < 5 && !this.chuChu.isDefense()) {
+                        if (!chuChu.isCharging())
                             this.chuChu.faceEntity(this.chuChu.getAttackTarget(), 10.0F, 10.0F);
                         this.entity.setAIMoveSpeed(0);
                         if (jumpCharge-- <= 0) {
-                            this.isCharging = false;
+                            chuChu.setCharging(false);
                             jumpCharge = chuChu.getRNG().nextInt(25) + 25;
-//                            this.jumpDelay = this.chuChu.getJumpDelay();
-                            this.entity.setAIMoveSpeed(0.25F + this.chuChu.getRNG().nextFloat());
+                            this.entity.setAIMoveSpeed(0.3F + this.chuChu.getRNG().nextFloat()/2);
                             this.chuChu.getJumpHelper().setJumping();
                             this.chuChu.playSound(this.chuChu.getJumpSound(), this.chuChu.getSoundVolume(), ((this.chuChu.getRNG().nextFloat() - this.chuChu.getRNG().nextFloat()) * 0.2F + 1.0F) * 0.8F);
                             mvmProg = 0;
                         } else {
-                            this.isCharging = true;
+                            chuChu.setCharging(true);
                         }
                     } else {
                         jumpCharge = this.chuChu.getRNG().nextInt(25) + 25;
-                        isCharging = false;
+                        chuChu.setCharging(false);
                         if (wait <= 0) {
                             this.chuChu.moveStrafing = 0.0F;
                             this.chuChu.moveForward = 0.0F;
