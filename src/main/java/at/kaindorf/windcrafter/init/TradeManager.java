@@ -1,5 +1,6 @@
 package at.kaindorf.windcrafter.init;
 
+import at.kaindorf.windcrafter.entities.villager.ArmorerEquipmentTrades;
 import at.kaindorf.windcrafter.entities.villager.ClericMobDropTrades;
 import at.kaindorf.windcrafter.entities.villager.NitwitMobDropTrades;
 import at.kaindorf.windcrafter.entities.villager.WeaponsmithMobDropTrades;
@@ -32,6 +33,7 @@ public class TradeManager {
         NITWIT.addTrade(1, new NitwitMobDropTrades());
         CLERIC.addTrade(1, new ClericMobDropTrades());
         WEAPON_SMITH.addTrade(1, new WeaponsmithMobDropTrades());
+        ARMORER.addTrade(1, new ArmorerEquipmentTrades());
     }
 
 }

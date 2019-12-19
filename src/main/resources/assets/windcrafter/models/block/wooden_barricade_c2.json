@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "north": "windcrafter:blocks/wooden_barricade_center",
+    "south": "windcrafter:blocks/wooden_barricade_center",
+    "east": "windcrafter:blocks/wooden_barricade_center",
+    "west": "windcrafter:blocks/wooden_barricade_center",
+    "up": "windcrafter:blocks/wooden_barricade1x1",
+    "down": "windcrafter:blocks/wooden_barricade1x1",
+    "particle": "windcrafter:blocks/wooden_barricade1x1"
+  }
+}

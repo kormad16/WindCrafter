@@ -3,6 +3,7 @@ package at.kaindorf.windcrafter.items;
 import at.kaindorf.windcrafter.creativetab.ModCreativeTabs;
 import at.kaindorf.windcrafter.entities.projectiles.EntityFireArrow;
 import at.kaindorf.windcrafter.entities.projectiles.EntityLightArrow;
+import at.kaindorf.windcrafter.gui.GuiZeldaMagic;
 import at.kaindorf.windcrafter.init.SoundManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,11 +26,11 @@ public class ItemLightArrow extends ItemArrow {
         try {
             EntityPlayer p = (EntityPlayer)shooter;
             if(!p.isCreative()) {
-                if (p.getEntityData().getInteger("ZeldaMagic") < 10) {
+                if (p.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC) < 5) {
                     p.playSound(SoundManager.errorSoundEvent, 1.0f, 1.0f);
                     return new EntityTippedArrow(worldIn, shooter);
                 } else {
-                    p.getEntityData().setInteger("ZeldaMagic", shooter.getEntityData().getInteger("ZeldaMagic") - 10);
+                    p.getDataManager().set(GuiZeldaMagic.ZELDA_MAGIC, shooter.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC) - 20);
                 }
             }
         } catch(Exception e) {}

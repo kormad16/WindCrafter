@@ -28,6 +28,7 @@ public class ItemManager {
     public static Item DARKNUT_SWORD = new ItemEnemyWeapon(1);
     public static Item MOBLIN_SPEAR = new ItemEnemyWeapon(2);
     public static Item MACHETE = new ItemEnemyWeapon(3);
+    public static Item STALFOS_CLUB = new ItemEnemyWeapon(4);
 
     // Enemy Drops
     public static Item JOY_PENDANT = new ItemMobDrop(0);
@@ -54,15 +55,19 @@ public class ItemManager {
     public static Item BLUE_POTION = new ItemHealPotion(2);
     public static Item FAIRY_BOTTLE = new ItemFairyBottle();
 
+    // Armor / Equipment
+    public static Item HEROS_CHARM = new ItemHerosCharm();
+
     public static void registerItems(RegistryEvent.Register<Item> e) {
         e.getRegistry().registerAll(
                 HEROS_SWORD,
                 HEART, HEARTCONTAINER, HEARTPIECE,
                 SMALLMAGIC, LARGEMAGIC,
                 FIREARROW, ICEARROW, LIGHTARROW,
-                BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE,
+                BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE, STALFOS_CLUB,
                 JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY, BOKO_SEED, GOLDEN_FEATHER, KNIGHTS_CREST,
-                RED_POTION, GREEN_POTION, BLUE_POTION, FAIRY_BOTTLE
+                RED_POTION, GREEN_POTION, BLUE_POTION, FAIRY_BOTTLE,
+                HEROS_CHARM
         );
         e.getRegistry().registerAll(MASTERSWORD);
         e.getRegistry().registerAll(TRIFORCESHARD);
@@ -85,6 +90,7 @@ public class ItemManager {
         registerRender(DARKNUT_SWORD);
         registerRender(MOBLIN_SPEAR);
         registerRender(MACHETE);
+        registerRender(STALFOS_CLUB);
 
         registerRender(SMALLMAGIC);
         registerRender(LARGEMAGIC);
@@ -106,6 +112,8 @@ public class ItemManager {
         registerRender(GREEN_POTION);
         registerRender(BLUE_POTION);
         registerRender(FAIRY_BOTTLE);
+
+        registerRender(HEROS_CHARM);
     }
 
     private static void registerRender(Item item) {

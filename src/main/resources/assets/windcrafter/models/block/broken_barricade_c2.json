@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "north": "windcrafter:blocks/broken_barricade_center",
+    "south": "windcrafter:blocks/broken_barricade_center",
+    "east": "windcrafter:blocks/broken_barricade_center",
+    "west": "windcrafter:blocks/broken_barricade_center",
+    "up": "windcrafter:blocks/broken_barricade1x1",
+    "down": "windcrafter:blocks/broken_barricade1x1",
+    "particle": "windcrafter:blocks/broken_barricade1x1"
+  }
+}

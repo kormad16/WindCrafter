@@ -25,6 +25,7 @@ item.bokostick.name=Boko Stick
 item.darknut_sword.name=Darknut Sword
 item.moblin_spear.name=Moblin Spear
 item.machete.name=Machete
+item.stalfos_club.name=Stalfos Club
 
 item.joypendant.name=Joy Pendant
 item.skull_necklace.name=Skull Necklace
@@ -47,6 +48,11 @@ item.icearrow.name=Ice Arrow
 item.firearrow.name=Fire Arrow
 item.lightarrow.name=Light Arrow
 
+item.heros_charm.name=Hero's Charm
+
 entity.bokoblin.name=Bokoblin
 entity.moblin.name=Moblin
 entity.chuchu.name=ChuChu
+
+tile.broken_barricade.name=Broken Barricade
+tile.wooden_barricade.name=Wooden Barricade
