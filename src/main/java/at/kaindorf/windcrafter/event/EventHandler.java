@@ -11,6 +11,7 @@ import at.kaindorf.windcrafter.items.ItemHerosSword;
 import at.kaindorf.windcrafter.items.ItemMagicJar;
 import jdk.nashorn.internal.ir.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.main.GameConfiguration;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -44,8 +45,8 @@ public class EventHandler {
         double health = e.getOriginal().getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue();
         e.getEntityPlayer().getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
         e.getEntityPlayer().setHealth((float)health);
-        e.getEntityPlayer().getEntityData().setInteger("ZeldaMagic", e.getOriginal().getEntityData().getInteger("ZeldaMagicMax"));
-        e.getEntityPlayer().getEntityData().setInteger("ZeldaMagicMax", e.getOriginal().getEntityData().getInteger("ZeldaMagicMax"));
+        e.getEntityPlayer().getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC, e.getOriginal().getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC_MAX));
+        e.getEntityPlayer().getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC_MAX, e.getOriginal().getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC_MAX));
     }
 
     public static final GuiZeldaHealth HEALTH_GUI = new GuiZeldaHealth(Minecraft.getMinecraft());
@@ -113,6 +114,15 @@ public class EventHandler {
     // Player Tick Event
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
+        // Init Magic
+        if(!e.player.getDataManager().getAll().contains(GuiZeldaMagic.ZELDA_MAGIC_INIT) && (!e.player.getDataManager().getAll().contains(GuiZeldaMagic.ZELDA_MAGIC) || !e.player.getDataManager().getAll().contains(GuiZeldaMagic.ZELDA_MAGIC_MAX))) {
+            try {
+                e.player.getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC, 100);
+                e.player.getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC_MAX, 100);
+                e.player.getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC_INIT, Boolean.TRUE);
+            } catch(Exception ex) {}
+        }
+
         // Hero's Charm
         try {
             if (!e.player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() && e.player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemHerosCharm) {
@@ -168,28 +178,23 @@ public class EventHandler {
             e.player.heal((float)health.getBaseValue());
             e.player.inventory.clearMatchingItems(ItemManager.HEARTCONTAINER, 0, 1, null);
         }
-        // Magic Init
-        if(!e.player.getEntityData().hasKey("ZeldaMagic") || e.player.getEntityData().getInteger("ZeldaMagicMax") == 0) {
-            e.player.getEntityData().setInteger("ZeldaMagic", 100);
-            e.player.getEntityData().setInteger("ZeldaMagicMax", 100);
-        }
         // Small Magic Jar
         while(e.player.inventory.hasItemStack(new ItemStack(ItemManager.SMALLMAGIC))) {
             e.player.playSound(SoundManager.smallPickupSoundEvent, 1.0f, 1.0f);
-            if(e.player.getEntityData().getInteger("ZeldaMagic") < e.player.getEntityData().getInteger("ZeldaMagicMax")) {
-                e.player.getEntityData().setInteger("ZeldaMagic", e.player.getEntityData().getInteger("ZeldaMagic") + 20);
-                if (e.player.getEntityData().getInteger("ZeldaMagic") > e.player.getEntityData().getInteger("ZeldaMagicMax"))
-                    e.player.getEntityData().setInteger("ZeldaMagic", e.player.getEntityData().getInteger("ZeldaMagicMax"));
+            if(e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC) < e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC_MAX)) {
+                e.player.getDataManager().set(GuiZeldaMagic.ZELDA_MAGIC, e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC) + 20);
+                if (e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC) > e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC_MAX))
+                    e.player.getDataManager().set(GuiZeldaMagic.ZELDA_MAGIC, e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC_MAX));
             }
             e.player.inventory.clearMatchingItems(ItemManager.SMALLMAGIC, 0, 1, null);
         }
         // Large Magic Jar
         while(e.player.inventory.hasItemStack(new ItemStack(ItemManager.LARGEMAGIC))) {
             e.player.playSound(SoundManager.smallPickupSoundEvent, 1.0f, 1.0f);
-            if(e.player.getEntityData().getInteger("ZeldaMagic") < e.player.getEntityData().getInteger("ZeldaMagicMax")) {
-                e.player.getEntityData().setInteger("ZeldaMagic", e.player.getEntityData().getInteger("ZeldaMagic") + 50);
-                if (e.player.getEntityData().getInteger("ZeldaMagic") > e.player.getEntityData().getInteger("ZeldaMagicMax"))
-                    e.player.getEntityData().setInteger("ZeldaMagic", e.player.getEntityData().getInteger("ZeldaMagicMax"));
+            if(e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC) < e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC_MAX)) {
+                e.player.getDataManager().set(GuiZeldaMagic.ZELDA_MAGIC, e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC) + 50);
+                if (e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC) > e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC_MAX))
+                    e.player.getDataManager().set(GuiZeldaMagic.ZELDA_MAGIC, e.player.getDataManager().get(GuiZeldaMagic.ZELDA_MAGIC_MAX));
             }
             e.player.inventory.clearMatchingItems(ItemManager.LARGEMAGIC, 0, 1, null);
         }

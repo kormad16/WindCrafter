@@ -1,6 +1,8 @@
 package at.kaindorf.windcrafter.event;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
+import at.kaindorf.windcrafter.gui.GuiZeldaMagic;
+import net.minecraft.client.particle.ParticleCrit;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,9 +19,12 @@ public class FMLEventHandler {
             e.player.setHealth(12.0f);
             e.player.getEntityData().setBoolean("ZeldaHealthInit", true);
         }
-        if(!e.player.getEntityData().hasKey("ZeldaMagic") || e.player.getEntityData().getInteger("ZeldaMagicMax") == 0) {
-            e.player.getEntityData().setInteger("ZeldaMagic", 100);
-            e.player.getEntityData().setInteger("ZeldaMagicMax", 100);
+        if(!e.player.getDataManager().getAll().contains(GuiZeldaMagic.ZELDA_MAGIC) || !e.player.getDataManager().getAll().contains(GuiZeldaMagic.ZELDA_MAGIC_MAX)) {
+            try {
+                e.player.getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC, 100);
+                e.player.getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC_MAX, 100);
+                e.player.getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC_INIT, Boolean.TRUE);
+            } catch(Exception ex) {}
         }
     }
 
