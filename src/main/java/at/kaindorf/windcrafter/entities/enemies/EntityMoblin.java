@@ -3,7 +3,7 @@ package at.kaindorf.windcrafter.entities.enemies;
 import at.kaindorf.windcrafter.entities.ai.EntityAIAttackMoblin;
 import at.kaindorf.windcrafter.init.ItemManager;
 import at.kaindorf.windcrafter.init.SoundManager;
-import at.kaindorf.windcrafter.util.WindcrafterLootTable;
+import at.kaindorf.windcrafter.entities.WindcrafterLootTable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -67,24 +67,12 @@ public class EntityMoblin extends EntityMob {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
-//        this.getAttributeMap().registerAttribute(SPAWN_REINFORCEMENTS_CHANCE).setBaseValue(this.rand.nextDouble() * net.minecraftforge.common.ForgeModContainer.zombieSummonBaseChance);
     }
 
     protected void entityInit()
     {
         super.entityInit();
     }
-
-//    public void setArmsRaised(boolean armsRaised)
-//    {
-//        this.getDataManager().set(ARMS_RAISED, Boolean.valueOf(armsRaised));
-//    }
-
-//    @SideOnly(Side.CLIENT)
-//    public boolean isArmsRaised()
-//    {
-//        return ((Boolean)this.getDataManager().get(ARMS_RAISED)).booleanValue();
-//    }
 
     /**
      * Get the experience points the entity currently has.
@@ -105,38 +93,6 @@ public class EntityMoblin extends EntityMob {
      */
     public void onLivingUpdate()
     {
-//        if (this.world.isDaytime() && !this.world.isRemote && !this.isChild() && this.shouldBurnInDay())
-//        {
-//            float f = this.getBrightness();
-//
-//            if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.canSeeSky(new BlockPos(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ)))
-//            {
-//                boolean flag = true;
-//                ItemStack itemstack = this.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-//
-//                if (!itemstack.isEmpty())
-//                {
-//                    if (itemstack.isItemStackDamageable())
-//                    {
-//                        itemstack.setItemDamage(itemstack.getItemDamage() + this.rand.nextInt(2));
-//
-//                        if (itemstack.getItemDamage() >= itemstack.getMaxDamage())
-//                        {
-//                            this.renderBrokenItemStack(itemstack);
-//                            this.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
-//                        }
-//                    }
-//
-//                    flag = false;
-//                }
-//
-//                if (flag)
-//                {
-//                    this.setFire(8);
-//                }
-//            }
-//        }
-
         super.onLivingUpdate();
     }
 
@@ -145,8 +101,6 @@ public class EntityMoblin extends EntityMob {
      */
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
-//        if (this.isBurning() && this.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem().equals(Items.SHIELD))
-//            this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.AIR));
         return super.attackEntityFrom(source, amount);
     }
 
@@ -262,13 +216,6 @@ public class EntityMoblin extends EntityMob {
         this.setCanPickUpLoot(true);
 
         this.setEquipmentBasedOnDifficulty(difficulty);
-//        this.setEnchantmentBasedOnDifficulty(difficulty);
-
-//        if (this.rand.nextFloat() < f * 0.05F)
-//        {
-//            this.getEntityAttribute(SPAWN_REINFORCEMENTS_CHANCE).applyModifier(new AttributeModifier("Leader bokoblin bonus", this.rand.nextDouble() * 0.25D + 0.5D, 0));
-//            this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(new AttributeModifier("Leader bokoblin bonus", this.rand.nextDouble() * 3.0D + 1.0D, 2));
-//        }
 
         return livingdata;
     }
@@ -281,7 +228,6 @@ public class EntityMoblin extends EntityMob {
         boolean flag = this.bokoblinWidth > 0.0F && this.bokoblinHeight > 0.0F;
         this.bokoblinWidth = width;
         this.bokoblinHeight = height;
-
         if (!flag)
         {
             this.multiplySize(1.0F);
@@ -307,25 +253,15 @@ public class EntityMoblin extends EntityMob {
     /**
      * Called when the mob's health reaches 0.
      */
-    public void onDeath(DamageSource cause) // TODO: add drop
+    public void onDeath(DamageSource cause)
     {
         super.onDeath(cause);
-
-//        if (cause.getTrueSource() instanceof EntityCreeper)
-//        {
-//            EntityCreeper entitycreeper = (EntityCreeper)cause.getTrueSource();
-//
-//            if (entitycreeper.getPowered() && entitycreeper.ableToCauseSkullDrop())
-//            {
-//                entitycreeper.incrementDroppedSkulls();
-//                ItemStack itemstack = this.getSkullDrop();
-//
-//                if (!itemstack.isEmpty())
-//                {
-//                    this.entityDropItem(itemstack, 0.0F);
-//                }
-//            }
-//        }
+        if (cause.getTrueSource() instanceof EntityPlayer) {
+            EntityPlayer p = (EntityPlayer)cause.getTrueSource();
+            if (p.getHealth() != p.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue()) {
+                if (this.world.rand.nextDouble() < 0.75) this.entityDropItem(new ItemStack(ItemManager.HEART), 0.0f);
+            }
+        }
     }
 
 }

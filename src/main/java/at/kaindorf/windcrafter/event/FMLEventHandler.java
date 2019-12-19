@@ -26,6 +26,9 @@ public class FMLEventHandler {
                 e.player.getDataManager().register(GuiZeldaMagic.ZELDA_MAGIC_INIT, Boolean.TRUE);
             } catch(Exception ex) {}
         }
+        if(!e.player.getEntityData().hasKey("DamageCoolDown")) {
+            e.player.getEntityData().setInteger("DamageCoolDown", 0);
+        }
     }
 
 }

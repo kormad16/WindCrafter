@@ -2,6 +2,7 @@ package at.kaindorf.windcrafter.init;
 
 import at.kaindorf.windcrafter.WindcrafterMod;
 import at.kaindorf.windcrafter.entities.enemies.EntityBokoblin;
+import at.kaindorf.windcrafter.entities.enemies.EntityChuChu;
 import at.kaindorf.windcrafter.entities.enemies.EntityMoblin;
 import at.kaindorf.windcrafter.entities.projectiles.EntityFireArrow;
 import at.kaindorf.windcrafter.entities.projectiles.EntityIceArrow;
@@ -27,15 +28,17 @@ import java.util.stream.Collectors;
 public class EntityManager {
 
     private static int nextEntityId = 1;
-    private static RegistryEvent.Register<EntityEntry> Event;
 
     public static void initEntities(RegistryEvent.Register<EntityEntry> event) {
         // Mobs
         event.getRegistry().register(getEntityWithSpawnEgg(
-                EntityBokoblin.class, "bokoblin", 80, 3, true, 0x213C39, 0x526D7B, EnumCreatureType.MONSTER, 100, 2, 4, getBiomesFromStrings(EntityBokoblin.BIOMES)
+                EntityBokoblin.class, "bokoblin", 80, 3, true, 0x213C39, 0x526D7B, EnumCreatureType.MONSTER, 20, 2, 4, getBiomesFromStrings(EntityBokoblin.BIOMES)
         ).build());
         event.getRegistry().register(getEntityWithSpawnEgg(
-                EntityMoblin.class, "moblin", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 100, 2, 4, getBiomesFromStrings(EntityMoblin.BIOMES)
+                EntityMoblin.class, "moblin", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 20, 2, 4, getBiomesFromStrings(EntityMoblin.BIOMES)
+        ).build());
+        event.getRegistry().register(getEntityWithSpawnEgg(
+                EntityChuChu.class, "chuchu", 80, 3, true, 0x524242, 0xadad9c, EnumCreatureType.MONSTER, 20, 2, 4, getBiomesFromStrings(EntityChuChu.BIOMES)
         ).build());
 
         // Projectiles
@@ -78,6 +81,7 @@ public class EntityManager {
         // Mobs
         RenderingRegistry.registerEntityRenderingHandler(EntityBokoblin.class, RendererBokoblin::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityMoblin.class, RendererMoblin::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityChuChu.class, RendererChuChu::new);
 
         // Projectiles
         RenderingRegistry.registerEntityRenderingHandler(EntityFireArrow.class, RendererFireArrow::new);
