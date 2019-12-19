@@ -183,7 +183,7 @@ public class EventHandler {
             else if (event.getEntityLiving() instanceof EntityChuChu) {
                 EntityChuChu chuChu = (EntityChuChu)event.getEntityLiving();
                 if (chuChu.isStone()
-                        || (!(event.getSource().getImmediateSource() instanceof EntityArrow) && (chuChu.isCharged() || chuChu.isDefense()))) {
+                        || (!(event.getSource().getImmediateSource() instanceof EntityArrow) && chuChu.isCharged()) || chuChu.isDefense()) {
                     event.setCanceled(true);
                 }
             }
