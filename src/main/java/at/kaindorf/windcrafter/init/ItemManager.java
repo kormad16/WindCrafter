@@ -25,6 +25,7 @@ public class ItemManager {
 
     // Enemy Weapons
     public static Item BOKOSTICK = new ItemEnemyWeapon(0);
+    public static Item BURNING_BOKOSTICK = new ItemBurningBokoStick();
     public static Item DARKNUT_SWORD = new ItemEnemyWeapon(1);
     public static Item MOBLIN_SPEAR = new ItemEnemyWeapon(2);
     public static Item MACHETE = new ItemEnemyWeapon(3);
@@ -64,7 +65,7 @@ public class ItemManager {
                 HEART, HEARTCONTAINER, HEARTPIECE,
                 SMALLMAGIC, LARGEMAGIC,
                 FIREARROW, ICEARROW, LIGHTARROW,
-                BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE, STALFOS_CLUB,
+                BOKOSTICK, BURNING_BOKOSTICK, DARKNUT_SWORD, MOBLIN_SPEAR, MACHETE, STALFOS_CLUB,
                 JOY_PENDANT, SKULL_NECKLACE, RED_CHUJELLY, GREEN_CHUJELLY, BLUE_CHUJELLY, BOKO_SEED, GOLDEN_FEATHER, KNIGHTS_CREST,
                 RED_POTION, GREEN_POTION, BLUE_POTION, FAIRY_BOTTLE,
                 HEROS_CHARM
@@ -87,6 +88,7 @@ public class ItemManager {
         registerRender(HEARTPIECE);
 
         registerRender(BOKOSTICK);
+        registerRender(BURNING_BOKOSTICK);
         registerRender(DARKNUT_SWORD);
         registerRender(MOBLIN_SPEAR);
         registerRender(MACHETE);
