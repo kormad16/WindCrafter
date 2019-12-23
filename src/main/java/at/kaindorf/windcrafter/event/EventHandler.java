@@ -134,16 +134,17 @@ public class EventHandler {
                 List<Entity> entities = Minecraft.getMinecraft().world.loadedEntityList;
                 for (Entity entity : entities) {
                     if (!(entity instanceof EntityPlayer) && entity instanceof EntityLiving) {
-                        if (!tagNameMap.containsKey(entity.getUniqueID()))
+                        if (!tagNameMap.containsKey(entity.getUniqueID())) {
                             tagNameMap.put(entity.getUniqueID(), entity.getCustomNameTag());
-                        entity.setCustomNameTag((tagNameMap.get(entity.getCustomNameTag()) != null ? " " + tagNameMap.get(entity.getCustomNameTag()) : "") + getHealthString(((EntityLiving) entity).getHealth(), (float) ((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()));
+                        }
+                        entity.setCustomNameTag((tagNameMap.get(entity.getUniqueID()) != null ? tagNameMap.get(entity.getUniqueID()) + " " : "") + getHealthString(((EntityLiving) entity).getHealth(), (float) ((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()) + " ");
                     }
                 }
             } else {
                 List<Entity> entities = Minecraft.getMinecraft().world.loadedEntityList;
                 for (Entity entity : entities) {
                     if (tagNameMap.containsKey(entity.getUniqueID())) {
-                            entity.setCustomNameTag(tagNameMap.get(entity.getCustomNameTag()) != null ? tagNameMap.get(entity.getCustomNameTag()) : "");
+                        entity.setCustomNameTag(tagNameMap.get(entity.getUniqueID()) != null ? tagNameMap.get(entity.getUniqueID()) : "");
                         tagNameMap.remove(entity.getUniqueID());
                     }
                 }
