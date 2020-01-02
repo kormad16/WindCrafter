@@ -77,7 +77,11 @@ public class EventHandler {
     public static void onPlayerHurt(LivingAttackEvent e) {
         if(e.getEntity() instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer)e.getEntity();
+
+            // Chu Chu Stun
             if (p.getEntityData().getInteger("DamageCoolDown") > 0) e.setCanceled(true);
+
+            // Fairy Bottle
             if(p.getHealth() - e.getAmount() <= 0 && p.inventory.hasItemStack(new ItemStack(ItemManager.FAIRY_BOTTLE))) {
                 p.inventory.clearMatchingItems(ItemManager.FAIRY_BOTTLE, 0, 1, null);
                 p.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
@@ -86,6 +90,12 @@ public class EventHandler {
                 p.performHurtAnimation();
                 p.getEntityData().setInteger("FairyParticleTimer",  (int)FAIRY_PARTICLE_MAX);
                 e.setCanceled(true);
+            }
+
+            // Burning Boko Stick
+            if(e.getSource().isFireDamage() && p.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem().getRegistryName().equals(ItemManager.BOKOSTICK.getRegistryName())) {
+                p.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).setCount(0);
+                p.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemManager.BURNING_BOKOSTICK));
             }
         }
     }
@@ -134,16 +144,17 @@ public class EventHandler {
                 List<Entity> entities = Minecraft.getMinecraft().world.loadedEntityList;
                 for (Entity entity : entities) {
                     if (!(entity instanceof EntityPlayer) && entity instanceof EntityLiving) {
-                        if (!tagNameMap.containsKey(entity.getUniqueID()))
+                        if (!tagNameMap.containsKey(entity.getUniqueID())) {
                             tagNameMap.put(entity.getUniqueID(), entity.getCustomNameTag());
-                        entity.setCustomNameTag((tagNameMap.get(entity.getCustomNameTag()) != null ? " " + tagNameMap.get(entity.getCustomNameTag()) : "") + getHealthString(((EntityLiving) entity).getHealth(), (float) ((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()));
+                        }
+                        entity.setCustomNameTag((tagNameMap.get(entity.getUniqueID()) != null ? tagNameMap.get(entity.getUniqueID()) + " " : "") + getHealthString(((EntityLiving) entity).getHealth(), (float) ((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()) + " ");
                     }
                 }
             } else {
                 List<Entity> entities = Minecraft.getMinecraft().world.loadedEntityList;
                 for (Entity entity : entities) {
                     if (tagNameMap.containsKey(entity.getUniqueID())) {
-                            entity.setCustomNameTag(tagNameMap.get(entity.getCustomNameTag()) != null ? tagNameMap.get(entity.getCustomNameTag()) : "");
+                        entity.setCustomNameTag(tagNameMap.get(entity.getUniqueID()) != null ? tagNameMap.get(entity.getUniqueID()) : "");
                         tagNameMap.remove(entity.getUniqueID());
                     }
                 }

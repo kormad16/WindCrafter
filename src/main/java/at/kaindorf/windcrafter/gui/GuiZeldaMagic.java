@@ -33,7 +33,6 @@ public class GuiZeldaMagic extends GuiIngame {
                 int k = 0;
                 if (this.mc.player.getDataManager().get(ZELDA_MAGIC_MAX) > 0)
                     k = (int) (183.0f * (((double) (this.mc.player.getDataManager().get(ZELDA_MAGIC) / (double) (this.mc.player.getDataManager().get(ZELDA_MAGIC_MAX))) / (double) (this.mc.player.getDataManager().get(ZELDA_MAGIC_MAX) == 100 ? 2 : 1))));
-                System.out.println("Magic=" + this.mc.player.getDataManager().get(ZELDA_MAGIC));
                 int l = 16 + (this.mc.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue() > 20 ? 10 : 0);
                 this.drawTexturedModalRect(5, l, 0, 64, 182 / (this.mc.player.getDataManager().get(ZELDA_MAGIC_MAX) == 100 ? 2 : 1), 5);
                 if (k > 0) {
